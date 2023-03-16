@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
+import React, { useEffect, useState } from "react";
 import Explore from './screens/explore/Explore';
 import PostDetail from './screens/explore/PostDetail';
 import PostEdit from './screens/explore/PostEdit';
@@ -7,6 +8,8 @@ import Comments from './screens/me/Comments';
 import Favorites from './screens/me/Favorites';
 import UserProfile from './screens/me/UserProfile';
 import RestaurantCategory from './screens/restaurant/RestaurantCategory';
+import RestaurantDetail from './screens/restaurant/RestaurantDetail';
+import RestaurantProfile from './screens/restaurant/RestaurantProfile';
 import Login from './screens/welcome/Login';
 import SignUp from './screens/welcome/SignUp';
 import Welcome from './screens/welcome/Welcome';
@@ -16,7 +19,8 @@ import { KeyboardTrackingView, KeyboardAwareInsetsView, KeyboardRegistry, Keyboa
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
-import { auth } from "./Firebase/firebase-setup";
+import { auth } from "./firebase/firebase-setup";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import colors from './colors';
 const AuthStack = (
   <>
@@ -56,7 +60,7 @@ export default function App() {
       <Stack.Navigator
         initialRouteName="Welcome"
         screenOptions={{
-          headerStyle: { backgroundColor: colors.secondary },
+          headerStyle: { backgroundColor: colors.primary },
           headerTintColor: colors.white,
           headerTitleStyle: { fontSize: 20 },
         }}
