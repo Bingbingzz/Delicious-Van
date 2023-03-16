@@ -8,13 +8,14 @@ import Comments from './screens/me/Comments';
 import Favorites from './screens/me/Favorites';
 import UserProfile from './screens/me/UserProfile';
 import RestaurantCategory from './screens/restaurant/RestaurantCategory';
-import RestaurantDetail from './screens/restaurant/RestaurantDetail';
+import CategoryDetail from './screens/restaurant/CategoryDetail';
 import RestaurantProfile from './screens/restaurant/RestaurantProfile';
 import Login from './screens/welcome/Login';
 import SignUp from './screens/welcome/SignUp';
 import Welcome from './screens/welcome/Welcome';
 import View from 'react-native-ui-lib/view';
 import Text from 'react-native-ui-lib/text';
+import BottomTab from './components/BottomTab';
 import { KeyboardTrackingView, KeyboardAwareInsetsView, KeyboardRegistry, KeyboardAccessoryView, KeyboardUtils } from 'react-native-ui-lib/keyboard';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -39,7 +40,7 @@ const AppStack = (
     <Stack.Screen name="Favorites" component={Favorites} />
     <Stack.Screen name="UserProfile" component={UserProfile} />
     <Stack.Screen name="RestaurantCategory" component={RestaurantCategory} />
-    <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+    <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
     <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
 
   </>
