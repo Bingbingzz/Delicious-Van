@@ -1,5 +1,6 @@
 import PressableButton from './PressableButton';
-import { IonIcon } from '@ionic/react';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import Explore from '../screens/explore/Explore';
 import RestaurantCategory from '../screens/restaurant/RestaurantCategory';
@@ -17,25 +18,25 @@ const BottomTab = ({ navigation }) => {
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     if (route.name === 'Explore') {
-                        iconName = 'compass-outline';
+                        iconName = 'explore';
                     } else if (route.name === 'RestaurantCategory') {
-                        iconName = 'restaurant-outline';
+                        iconName = 'local-restaurant';
                     } else if (route.name === 'UserProfile') {
                         iconName = 'person-outline';
                     }
 
-                    return <IonIcon name={iconName} size={size} color={color} />;
+                    return <MaterialIcons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: colors.white,
+                tabBarActiveTintColor: colors.primary,
                 tabBarInactiveTintColor: colors.background,
                 tabBarStyle: {
                     display: 'flex',
-                    backgroundColor: colors.buttonBackground,
+                    backgroundColor: colors.background,
                 },
-                activeTintColor: colors.white,
+                activeTintColor: colors.primary,
                 inactiveTintColor: colors.grey,
                 headerStyle: {
-                    backgroundColor: colors.buttonBackground,
+                    backgroundColor: colors.primary,
                 },
                 headerTitleAlign: 'center',
                 headerTintColor: colors.white,
@@ -45,14 +46,21 @@ const BottomTab = ({ navigation }) => {
                             iconPressed(navigation);
                         }}
                     >
-                        <IonIcon icon={iconName} size={24} color="black" />
+                        <Ionicons icon={iconName} size={24} color="black" />
                     </PressableButton>
                 ),
             })}
         >
             <Tab.Screen name="Explore" component={Explore} />
-            <Tab.Screen name="RestaurantCategory" component={RestaurantCategory} />
-            <Tab.Screen name="UserProfile" component={UserProfile} />
+            <Tab.Screen
+                name="RestaurantCategory"
+                component={RestaurantCategory}
+                options={{ title: 'Restaurant' }}
+            />
+
+            <Tab.Screen name="UserProfile"
+                component={UserProfile}
+                options={{ title: 'Profile' }} />
         </Tab.Navigator>
     );
 };
