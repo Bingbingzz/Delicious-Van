@@ -1,16 +1,49 @@
 import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { collection, addDoc } from "firebase/firestore";
-import { firestore } from './firebase-setup';
+import { firestore, storage } from './firebase-setup';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-// Add a new document with a generated id.
 export async function writePostToDB(post) {
     try {
-        const docRef = await addDoc(collection(firestore, "posts"), post);
+
+        const uploadImage = async (imageUri) => {
+
+            try {
+
+                const response = await fetch(imageUri);
+                const blob = await response.blob();
+                const storageRef = ref(storage, `images/${Date.now()}_${post.title}`);
+                const uploadTask = uploadBytesResumable(storageRef, blob);
+                uploadTask.on('state_changed', (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log(`Upload is ${progress}% done`);
+                });
+                // Wait for the upload to complete
+                await uploadTask;
+                console.log("Image uploaded");
+                return getDownloadURL(storageRef);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                console.error('Error payload:', error.serverResponse);
+                throw error;
+            }
+        };
+        const imageUrls = [];
+        for (const imageUri of post.images) {
+            const url = await uploadImage(imageUri);
+            imageUrls.push(url);
+        }
+        console.log("Images uploaded");
+
+        const postWithImages = { ...post, imageUrls };
+        console.log("Adding post to Firestore");
+        const docRef = await addDoc(collection(firestore, "posts"), postWithImages);
         console.log("Document written with ID: ", docRef.id);
     } catch (err) {
         console.log(err);
     }
 }
+
 
 export async function deletePostFromDB(postId) {
     try {

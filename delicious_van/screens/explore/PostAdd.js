@@ -1,14 +1,50 @@
-import { View, TextInput, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, Text, Alert, Image } from 'react-native';
 import React, { useState } from 'react';
 import colors from '../../colors'
 import PressableButton from '../../components/PressableButton'
 import { writePostToDB } from '../../firebase/firestoreHelper'
-
+import * as ImagePicker from 'expo-image-picker';
+import { FlatList } from 'react-native';
 export default function PostAdd({ navigation }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [isValid, setIsValid] = useState(true);
-    //TODO: User add picture
+    const [images, setImages] = useState([]);
+
+
+    const handleImageSelect = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert("Permission to access the camera roll is required!");
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImages((prevImages) => [...prevImages, result.assets[0].uri]);
+        }
+    };
+
+    const handleImageDelete = (index) => {
+        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    };
+    const ImagePreview = ({ uri, onDelete }) => (
+        <View style={styles.imagePreviewContainer}>
+            <Image source={{ uri }} style={styles.image} resizeMode="cover" />
+            <PressableButton customizedStyle={styles.deleteIcon} buttonPressed={onDelete}>
+                <Text style={styles.deleteIconText}>x</Text>
+            </PressableButton>
+        </View>
+    );
+
+
     const handleSubmit = async () => {
         if (!title || !description) {
             Alert.alert('Invalid Input', 'Please enter a valid title and a description.', [{ text: 'OK' }]);
@@ -16,18 +52,19 @@ export default function PostAdd({ navigation }) {
         }
 
         try {
-            writePostToDB({ title: title, description: description });
-
+            await writePostToDB({ title: title, description: description, images: images });
         } catch (error) {
             console.log(error.message);
         }
         navigation.goBack();
-
     };
+
+
     const handleReset = () => {
         setTitle('');
         setDescription('');
         setIsValid(true);
+        setImage(null);
     };
 
     const handleTitleChange = (text) => {
@@ -43,6 +80,7 @@ export default function PostAdd({ navigation }) {
             setIsValid(true);
         }
     };
+
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
@@ -67,7 +105,22 @@ export default function PostAdd({ navigation }) {
             {!isValid && !description && (
                 <Text style={styles.errorMessage}>Please enter a description</Text>
             )}
+            {images.length > 0 && (
+                <FlatList
+                    data={images}
+                    renderItem={({ item, index }) => (
+                        <ImagePreview uri={item} onDelete={() => handleImageDelete(index)} />
+                    )}
+                    keyExtractor={(item, index) => index.toString()}
+                    horizontal
+                />
+            )}
+
+
             <View style={styles.buttonsContainer}>
+                <PressableButton buttonPressed={handleImageSelect}>
+                    <Text>Upload Image</Text>
+                </PressableButton>
                 <PressableButton
                     buttonPressed={handleReset}
                     customizedStyle={[styles.button]}
@@ -142,5 +195,34 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 12,
     },
+    imagePreviewContainer: {
+        position: 'relative',
+        marginRight: 10,
+    },
+
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 5,
+    },
+
+    deleteIcon: {
+        position: 'absolute',
+        top: -5,
+        right: -5,
+        backgroundColor: 'red',
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    deleteIconText: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+
 });
 
