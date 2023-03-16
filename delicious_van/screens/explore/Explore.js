@@ -1,13 +1,14 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PressableButton from '../../components/PressableButton';
-import { Ionicons } from '@expo/vector-icons'; // import Ionicons from expo vector-icons library
+import { Ionicons } from '@expo/vector-icons';
 import colors from '../../colors';
+import PostGallery from '../../components/PostGallery';
+
 const Stack = createNativeStackNavigator();
 
 export default function Explore({ navigation }) {
-  // add a custom component to the header for the "Add" button
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -23,7 +24,7 @@ export default function Explore({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>Explore Screen</Text>
+      <PostGallery />
     </View>
   );
 }
@@ -31,15 +32,14 @@ export default function Explore({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#f0f0f0', // Change the background color to a light grey
   },
   button: {
-    marginRight: 10, // add some margin to the right side of the button
+    marginRight: 10,
     backgroundColor: colors.secondary,
     borderRadius: 50,
     height: 40,
-    width: 40, // set the width and height of the button to 40 units to make it square
+    width: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
