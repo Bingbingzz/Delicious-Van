@@ -7,8 +7,8 @@ export async function writePostToDB(post) {
     try {
         const uploadImage = async (imageUri) => {
             try {
-
-                const response = await fetch(imageUri);
+                const normalizedUri = imageUri.startsWith("file://") ? imageUri : "file://" + imageUri;
+                const response = await fetch(normalizedUri);
                 const blob = await response.blob();
                 const storageRef = ref(storage, `images/${Date.now()}_${post.title}`);
                 const uploadTask = uploadBytesResumable(storageRef, blob);
@@ -25,6 +25,7 @@ export async function writePostToDB(post) {
                 throw error;
             }
         };
+
         const imageUrls = [];
         for (const imageUri of post.images) {
             const url = await uploadImage(imageUri);

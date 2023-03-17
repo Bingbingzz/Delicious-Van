@@ -49,7 +49,6 @@ export default function PostDetail({ route }) {
   };
 
   const handleEditItem = () => {
-    // Edit item
     setMenuVisible(false);
     navigation.navigate('PostEdit', { post });
   };

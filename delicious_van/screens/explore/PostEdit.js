@@ -11,7 +11,6 @@ export default function PostEdit({ route, navigation }) {
     const [newTitle, setNewTitle] = useState(title);
     const [newDescription, setNewDescription] = useState(description);
     const [images, setImages] = useState(imageUrls);
-    const [newPost, setNewPost] = useState(post)
 
     const handleImageSelect = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -47,10 +46,11 @@ export default function PostEdit({ route, navigation }) {
     );
 
     const handleSave = () => {
-        setNewPost({ title: newTitle, description: newDescription, imageUrls: images })
-        updatePostInDB(id, newPost)
+        const updatedPost = { title: newTitle, description: newDescription, imageUrls: images };
+        updatePostInDB(id, updatedPost);
         navigation.goBack();
     };
+
 
     return (
         <View style={styles.container}>
