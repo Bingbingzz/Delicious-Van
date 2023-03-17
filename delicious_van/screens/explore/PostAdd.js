@@ -56,7 +56,7 @@ export default function PostAdd({ navigation }) {
         } catch (error) {
             console.log(error.message);
         }
-        navigation.navigate("Explore");
+        navigation.goBack();
     };
 
 

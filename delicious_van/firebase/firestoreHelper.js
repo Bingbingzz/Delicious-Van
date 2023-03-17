@@ -52,7 +52,7 @@ export async function deletePostFromDB(postId) {
 export async function updatePostInDB(postId, updatedPost) {
     try {
         const entryRef = doc(firestore, 'posts', postId);
-        await updateDoc(entryRef, updatedEntry);
+        await updateDoc(entryRef, updatedPost);
         console.log('Document updated successfully');
     } catch (err) {
         console.log(err);
