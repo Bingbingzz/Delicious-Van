@@ -5,9 +5,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 export async function writePostToDB(post) {
     try {
-
         const uploadImage = async (imageUri) => {
-
             try {
 
                 const response = await fetch(imageUri);
@@ -20,7 +18,6 @@ export async function writePostToDB(post) {
                 });
                 // Wait for the upload to complete
                 await uploadTask;
-                console.log("Image uploaded");
                 return getDownloadURL(storageRef);
             } catch (error) {
                 console.error('Error uploading image:', error);
@@ -33,17 +30,16 @@ export async function writePostToDB(post) {
             const url = await uploadImage(imageUri);
             imageUrls.push(url);
         }
-        console.log("Images uploaded");
+
 
         const postWithImages = { ...post, imageUrls };
-        console.log("Adding post to Firestore");
+
         const docRef = await addDoc(collection(firestore, "posts"), postWithImages);
         console.log("Document written with ID: ", docRef.id);
     } catch (err) {
         console.log(err);
     }
 }
-
 
 export async function deletePostFromDB(postId) {
     try {

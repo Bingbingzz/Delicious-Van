@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import PostCard from './PostCard'; // Import the PostCard component
 import { firestore } from '../firebase/firebase-setup'
+import { useNavigation } from '@react-navigation/native';
+
 import {
     collection,
     getFirestore,
@@ -9,6 +11,7 @@ import {
 } from 'firebase/firestore';
 export default function PostGallery() {
     const [posts, setPosts] = useState([]);
+    const navigation = useNavigation();
 
     useEffect(() => {
         const unsubscribe = onSnapshot(collection(firestore, "posts"), (querySnapshot) => {
@@ -25,7 +28,7 @@ export default function PostGallery() {
         return () => unsubscribe();
     }, []);
 
-    const renderItem = ({ item }) => <PostCard post={item} />;
+    const renderItem = ({ item }) => <PostCard post={item} navigation={navigation} />;
 
     return (
         <View style={styles.container}>
