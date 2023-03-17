@@ -20,6 +20,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 import { auth } from "./firebase/firebase-setup";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { Provider } from 'react-native-paper';
+
 import colors from './colors';
 const AuthStack = (
   <>
@@ -65,19 +67,21 @@ export default function App() {
     });
   }, []);
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="BottomTab"
-        screenOptions={{
-          headerStyle: { backgroundColor: colors.primary },
-          headerTintColor: colors.white,
-          headerTitleStyle: { fontSize: 20 },
-        }}
-      >
-        {/* {AppStack} */}
-        {isAuthenticated ? AppStack : AuthStack}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="BottomTab"
+          screenOptions={{
+            headerStyle: { backgroundColor: colors.primary },
+            headerTintColor: colors.white,
+            headerTitleStyle: { fontSize: 20 },
+          }}
+        >
+          {/* {AppStack} */}
+          {isAuthenticated ? AppStack : AuthStack}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

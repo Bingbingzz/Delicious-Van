@@ -11,6 +11,13 @@ export default function PostAdd({ navigation }) {
     const [isValid, setIsValid] = useState(true);
     const [images, setImages] = useState([]);
 
+    const normalizeImageUri = (uri) => {
+        if (uri.startsWith("file://")) {
+            return uri;
+        } else {
+            return "file://" + uri;
+        }
+    };
 
     const handleImageSelect = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();

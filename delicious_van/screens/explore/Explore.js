@@ -32,7 +32,7 @@ export default function Explore({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0', // Change the background color to a light grey
+    backgroundColor: colors.backgroundColor, // Change the background color to a light grey
   },
   button: {
     marginRight: 10,
