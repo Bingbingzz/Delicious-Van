@@ -8,9 +8,6 @@ import PostAdd from './screens/explore/PostAdd';
 import Comments from './screens/me/Comments';
 import Favorites from './screens/me/Favorites';
 import UserProfile from './screens/me/UserProfile';
-import RestaurantCategory from './screens/restaurant/RestaurantCategory';
-import CategoryDetail from './screens/restaurant/CategoryDetail';
-import RestaurantProfile from './screens/restaurant/RestaurantProfile';
 import Login from './screens/welcome/Login';
 import SignUp from './screens/welcome/SignUp';
 import Welcome from './screens/welcome/Welcome';
@@ -49,10 +46,6 @@ const AppStack = (
     <Stack.Screen name="Comments" component={Comments} />
     <Stack.Screen name="Favorites" component={Favorites} />
     <Stack.Screen name="UserProfile" component={UserProfile} />
-    <Stack.Screen name="RestaurantCategory" component={RestaurantCategory} />
-    <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
-    <Stack.Screen name="RestaurantProfile" component={RestaurantProfile} />
-
   </>
 );
 export default function App() {

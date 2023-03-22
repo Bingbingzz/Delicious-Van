@@ -4,16 +4,31 @@ import PressableButton from '../../components/PressableButton';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Menu } from 'react-native-paper';
-import { deletePostFromDB } from '../../firebase/firestoreHelper';
+import { deletePostFromDB, getPostFromDB } from '../../firebase/firestoreHelper';
 
 const defaultImage = 'https://i.ibb.co/JtS24qP/default-image.jpg';
 
 export default function PostDetail({ route }) {
   const { post } = route.params;
-  const { title, imageUrls, description, id } = post;
-  const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const navigation = useNavigation();
   const [menuVisible, setMenuVisible] = useState(false)
+  const [postData, setPostData] = useState(post);
+  const { title, imageUrls, description, id } = postData;
+  const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
+  const fetchPostData = async () => {
+    const updatedPost = await getPostFromDB(id);
+    if (updatedPost) {
+      setPostData(updatedPost);
+    }
+  };
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchPostData();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -68,6 +83,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    shadowColor: "#000",
   },
   image: {
     width: '100%',
