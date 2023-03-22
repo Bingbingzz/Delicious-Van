@@ -1,8 +1,27 @@
-import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { collection, addDoc } from "firebase/firestore";
 import { firestore, storage } from './firebase-setup';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
+export async function getPostFromDB(id) {
+    try {
+        const postRef = doc(firestore, "posts", id);
+        const postSnapshot = await getDoc(postRef);
+
+        if (postSnapshot.exists()) {
+            const postData = postSnapshot.data();
+            return {
+                id: postSnapshot.id,
+                ...postData
+            };
+        } else {
+            console.log("No such document!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting document:", error);
+    }
+}
 export async function writePostToDB(post) {
     try {
         const uploadImage = async (imageUri) => {
