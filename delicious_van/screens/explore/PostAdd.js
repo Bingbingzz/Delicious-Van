@@ -1,22 +1,29 @@
+import { View, TextInput, StyleSheet, Text, Alert, Image } from 'react-native';
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, FlatList, Image } from 'react-native';
-import colors from '../../colors';
-import PressableButton from '../../components/PressableButton';
+import colors from '../../colors'
+import PressableButton from '../../components/PressableButton'
+import { writePostToDB } from '../../firebase/firestoreHelper'
 import * as ImagePicker from 'expo-image-picker';
-import { updatePostInDB } from '../../firebase/firestoreHelper';
-export default function PostEdit({ route, navigation }) {
-    const { post } = route.params;
-    const { title, imageUrls, description, id } = post;
+import { FlatList } from 'react-native';
+export default function PostAdd({ navigation }) {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [isValid, setIsValid] = useState(true);
+    const [images, setImages] = useState([]);
 
-    const [newTitle, setNewTitle] = useState(title);
-    const [newDescription, setNewDescription] = useState(description);
-    const [images, setImages] = useState(imageUrls);
+    const normalizeImageUri = (uri) => {
+        if (uri.startsWith("file://")) {
+            return uri;
+        } else {
+            return "file://" + uri;
+        }
+    };
 
     const handleImageSelect = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
-            alert('Permission to access the camera roll is required!');
+            alert("Permission to access the camera roll is required!");
             return;
         }
 
@@ -35,7 +42,6 @@ export default function PostEdit({ route, navigation }) {
     const handleImageDelete = (index) => {
         setImages((prevImages) => prevImages.filter((_, i) => i !== index));
     };
-
     const ImagePreview = ({ uri, onDelete }) => (
         <View style={styles.imagePreviewContainer}>
             <Image source={{ uri }} style={styles.image} resizeMode="cover" />
@@ -45,12 +51,42 @@ export default function PostEdit({ route, navigation }) {
         </View>
     );
 
-    const handleSave = () => {
-        const updatedPost = { title: newTitle, description: newDescription, imageUrls: images };
-        updatePostInDB(id, updatedPost);
+
+    const handleSubmit = async () => {
+        if (!title || !description) {
+            Alert.alert('Invalid Input', 'Please enter a valid title and a description.', [{ text: 'OK' }]);
+            return;
+        }
+
+        try {
+            await writePostToDB({ title: title, description: description, images: images });
+        } catch (error) {
+            console.log(error.message);
+        }
         navigation.goBack();
     };
 
+
+    const handleReset = () => {
+        setTitle('');
+        setDescription('');
+        setIsValid(true);
+        setImage(null);
+    };
+
+    const handleTitleChange = (text) => {
+        setTitle(text);
+        if (!isValid) {
+            setIsValid(true);
+        }
+    };
+
+    const handleDescriptionChange = (text) => {
+        setDescription(text);
+        if (!isValid) {
+            setIsValid(true);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -58,18 +94,24 @@ export default function PostEdit({ route, navigation }) {
                 <Text style={styles.title}>Title</Text>
                 <TextInput
                     style={styles.input}
-                    value={newTitle}
-                    onChangeText={setNewTitle}
+                    value={title}
+                    onChangeText={handleTitleChange}
                 />
             </View>
+            {!isValid && !title && (
+                <Text style={styles.errorMessage}>Please enter a valid title</Text>
+            )}
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Description</Text>
                 <TextInput
                     style={styles.input}
-                    value={newDescription}
-                    onChangeText={setNewDescription}
+                    value={description}
+                    onChangeText={handleDescriptionChange}
                 />
             </View>
+            {!isValid && !description && (
+                <Text style={styles.errorMessage}>Please enter a description</Text>
+            )}
             {images.length > 0 && (
                 <FlatList
                     data={images}
@@ -81,20 +123,27 @@ export default function PostEdit({ route, navigation }) {
                 />
             )}
 
+
             <View style={styles.buttonsContainer}>
                 <PressableButton buttonPressed={handleImageSelect}>
                     <Text>Upload Image</Text>
                 </PressableButton>
                 <PressableButton
-                    buttonPressed={handleSave}
+                    buttonPressed={handleReset}
                     customizedStyle={[styles.button]}
                 >
-                    <Text style={styles.buttonText}>Save</Text>
+                    <Text style={styles.buttonText}>Reset</Text>
+                </PressableButton>
+                <PressableButton
+                    buttonPressed={handleSubmit}
+                    customizedStyle={[styles.button]}
+                >
+                    <Text style={styles.buttonText}>Submit</Text>
                 </PressableButton>
             </View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
