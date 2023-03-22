@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    shadowColor: "#000",
   },
   image: {
     width: '100%',
