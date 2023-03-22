@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import Explore from '../screens/explore/Explore';
-import RestaurantCategory from '../screens/restaurant/RestaurantCategory';
+import PostAdd from '../screens/explore/PostAdd';
 import UserProfile from '../screens/me/UserProfile';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import colors from '../colors';
@@ -12,15 +12,18 @@ const Tab = createBottomTabNavigator();
 
 const BottomTab = ({ navigation }) => {
     let iconName;
-
+    let size;
+    let color;
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     if (route.name === 'Explore') {
                         iconName = 'explore';
-                    } else if (route.name === 'RestaurantCategory') {
-                        iconName = 'local-restaurant';
+                    } else if (route.name === 'PostAdd') {
+                        iconName = 'add';
+                        size = 40;
+                        color = colors.primary;
                     } else if (route.name === 'UserProfile') {
                         iconName = 'person-outline';
                     }
@@ -53,9 +56,9 @@ const BottomTab = ({ navigation }) => {
         >
             <Tab.Screen name="Explore" component={Explore} />
             <Tab.Screen
-                name="RestaurantCategory"
-                component={RestaurantCategory}
-                options={{ title: 'Restaurant' }}
+                name="PostAdd"
+                component={PostAdd}
+                options={{ title: 'Add Post' }}
             />
 
             <Tab.Screen name="UserProfile"
@@ -64,9 +67,4 @@ const BottomTab = ({ navigation }) => {
         </Tab.Navigator>
     );
 };
-
-function iconPressed(navigation) {
-    navigation.navigate('PostEdit');
-}
-
 export default BottomTab;
