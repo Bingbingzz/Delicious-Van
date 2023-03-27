@@ -47,9 +47,10 @@ export default function PostGallery() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 7,
     },
     gallery: {
+        top: 30,
         padding: 8,
     },
     cardContainer: {

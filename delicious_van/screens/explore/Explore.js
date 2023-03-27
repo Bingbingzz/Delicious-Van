@@ -5,6 +5,7 @@ import PressableButton from '../../components/PressableButton';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../../colors';
 import PostGallery from '../../components/PostGallery';
+import SearchBar from '../../components/SearchBar';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function Explore({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <SearchBar/>
       <PostGallery />
     </View>
   );
