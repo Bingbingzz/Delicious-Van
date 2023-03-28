@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import PostCard from "./PostCard"; // Import the PostCard component
 import { firestore } from "../firebase/firebase-setup";
 import { useNavigation } from "@react-navigation/native";
@@ -11,6 +20,7 @@ export default function PostGallery({ txt }) {
   const [oldData, setOldData] = useState([]);
   const navigation = useNavigation();
   const [text, setText] = useState("");
+  const [visible, setVisible] = useState("");
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(firestore, "posts"),
@@ -49,17 +59,35 @@ export default function PostGallery({ txt }) {
   console.log(data);
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.search}
-          placeholder="Search for delicious food"
-          value={text}
-          onChangeText={(txt) => {
-            onSearch(txt);
-            setText(txt);
-          }}
-        />
+      <Image
+        style={styles.image}
+        source={require("../assets/search-2.svg.png")}
+      />
+      <View style={styles.searchAndSortContainer}>
+        <View style={styles.searchBarContainer}>
+          <TextInput
+            style={styles.search}
+            placeholder="Search for delicious food"
+            value={text}
+            onChangeText={(txt) => {
+              onSearch(txt);
+              setText(txt);
+            }}
+          />
+        </View>
+
+        <View>
+          <TouchableOpacity
+            style={styles.sortContainer}
+            onPress={() => {
+              setVisible(true);
+            }}
+          >
+            <Image style={styles.sort} source={require("../assets/sort.png")} />
+          </TouchableOpacity>
+        </View>
       </View>
+
       <View style={styles.cardContainer}>
         <FlatList
           data={data}
@@ -69,6 +97,44 @@ export default function PostGallery({ txt }) {
           numColumns={2}
         />
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onRequestClose={() => {
+          setVisible(!visible);
+        }}
+      >
+        <View style={styles.classificaitonContainer}>
+          <View style={styles.sortClassificationContainer}>
+            <TouchableOpacity
+              style={styles.classificaiton}
+              onPress={() => setVisible(false)}
+            >
+              <Text style={styles.text}>Sort by nearest</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.classificaiton}
+              onPress={() => setVisible(false)}
+            >
+              <Text style={styles.text}>Sort by newest</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.classificaiton}
+              onPress={() => setVisible(false)}
+            >
+              <Text style={styles.text}>Sort by hotest</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.classificaiton, {borderBottomWidth:0}]}
+              onPress={() => setVisible(false)}
+            >
+              <Text style={styles.text}>Sort by rating</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -86,17 +152,66 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     marginBottom: 16,
   },
-  searchContainer: {
-    flex: 1,
-    backgroundColor: colors.white,
+  searchAndSortContainer: {
+    flexDirection: "row",
+  },
+  searchBarContainer: {
+    width: "80%",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 5,
+    height: 40,
+    borderWidth: 0.2,
+    marginLeft: 20,
+  },
+  text: {
+    fontSize: 16,
+    color: colors.black,
+  },
+  image: {
+    height: 20,
+    width: 20,
+    marginLeft: 30,
+    top: 30,
   },
   search: {
     position: "absolute",
-    left: 20,
+    width: "76%",
+    left: 40,
     right: 20,
-    top: 10,
     height: 30,
-    backgroundColor: colors.lightGray,
     borderRadius: 5,
   },
+  sort: {
+    top: 5,
+    width: 28,
+    height: 28,
+    opacity: 0.6,
+    left: 10,
+  },
+  sortContainer: {
+    marginRight: 20,
+  },
+  sortClassificationContainer: {
+    width: "80%",
+    height: 160,
+    borderRadius: 10,
+    borderWidth:0.2,
+    borderColor:colors.border,
+    backgroundColor: colors.white,
+  },
+  classificaiton: {
+    width: "100%",
+    height: 40,
+    justifyContent: "center",
+    paddingLeft: 20,
+    borderBottomWidth: 0.5,
+  },
+  classificaitonContainer:{
+    flex:1,
+    justifyContent:'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0.5)',
+
+  }
 });
