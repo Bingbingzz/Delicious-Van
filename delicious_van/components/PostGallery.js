@@ -55,8 +55,7 @@ export default function PostGallery({ txt }) {
       setData(tempList);
     }
   };
-  console.log(text);
-  console.log(data);
+console.log(data)
   return (
     <View style={styles.container}>
       <Image
@@ -74,8 +73,20 @@ export default function PostGallery({ txt }) {
               setText(txt);
             }}
           />
+          {text == "" ? null : (
+            <TouchableOpacity
+              onPress={() => {
+                setText("");
+                onSearch(text);//why not apear all posts?
+              }}
+            >
+              <Image
+                style={styles.closeIcon}
+                source={require("../assets/delete.png")}
+              />
+            </TouchableOpacity>
+          )}
         </View>
-
         <View>
           <TouchableOpacity
             style={styles.sortContainer}
@@ -83,7 +94,10 @@ export default function PostGallery({ txt }) {
               setVisible(true);
             }}
           >
-            <Image style={styles.sort} source={require("../assets/sort.png")} />
+            <Image
+              style={styles.sortIcon}
+              source={require("../assets/sort.png")}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -127,7 +141,7 @@ export default function PostGallery({ txt }) {
               <Text style={styles.text}>Sort by hotest</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.classificaiton, {borderBottomWidth:0}]}
+              style={[styles.classificaiton, { borderBottomWidth: 0 }]}
               onPress={() => setVisible(false)}
             >
               <Text style={styles.text}>Sort by rating</Text>
@@ -182,12 +196,18 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 5,
   },
-  sort: {
+  sortIcon: {
     top: 5,
     width: 28,
     height: 28,
     opacity: 0.6,
     left: 10,
+  },
+  closeIcon: {
+    height: 30,
+    width: 30,
+    left: 300,
+    opacity: 0.5,
   },
   sortContainer: {
     marginRight: 20,
@@ -196,8 +216,8 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 160,
     borderRadius: 10,
-    borderWidth:0.2,
-    borderColor:colors.border,
+    borderWidth: 0.2,
+    borderColor: colors.border,
     backgroundColor: colors.white,
   },
   classificaiton: {
@@ -207,11 +227,10 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderBottomWidth: 0.5,
   },
-  classificaitonContainer:{
-    flex:1,
-    justifyContent:'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0.5)',
-
-  }
+  classificaitonContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0.5)",
+  },
 });
