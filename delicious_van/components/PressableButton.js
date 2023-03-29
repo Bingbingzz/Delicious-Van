@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     pressableDefault: {
         backgroundColor: colors.primary,
         borderRadius: 8,
-        opacity: 0.5,
+        // opacity: 0.5,
         marginBottom: 10,
         flexDirection: "row",
         alignItems: "center",
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     pressedStyle: {
         borderRadius: 8,
         backgroundColor: colors.pressedButtonStyle,
-        opacity: 0.5,
+        // opacity: 0.5,
         marginBottom: 10,
         flexDirection: "row",
         alignItems: "center",

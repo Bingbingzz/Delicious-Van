@@ -40,7 +40,7 @@ const BottomTab = ({ navigation }) => {
                     backgroundColor: colors.primary,
                 },
                 headerTitleAlign: 'center',
-                headerTintColor: colors.white,
+                headerTintColor: '#333333',
                 headerRight: () => (
                     <PressableButton
                         buttonPressed={() => {
@@ -56,7 +56,7 @@ const BottomTab = ({ navigation }) => {
             <Tab.Screen
                 name="PostAdd"
                 component={PostAdd}
-                options={{ title: 'Add Post' }}
+                options={{ title: 'Write a Post' }}
             />
 
             <Tab.Screen name="UserProfile"
