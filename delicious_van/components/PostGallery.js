@@ -55,7 +55,7 @@ export default function PostGallery({ txt }) {
       setData(tempList);
     }
   };
-console.log(data)
+  console.log(data)
   return (
     <View style={styles.container}>
       <Image
@@ -77,7 +77,7 @@ console.log(data)
             <TouchableOpacity
               onPress={() => {
                 setText("");
-                onSearch(text);//why not apear all posts?
+                onSearch("");
               }}
             >
               <Image
