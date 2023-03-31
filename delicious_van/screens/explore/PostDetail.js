@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, ActionSheetIOS, Dimensions, TextInput } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, ActionSheetIOS, Dimensions, TextInput, Alert } from 'react-native';
 import PressableButton from '../../components/PressableButton';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -64,9 +64,21 @@ export default function PostDetail({ route }) {
   };
 
   const handleDeleteItem = () => {
-    deletePostFromDB(id);
     setMenuVisible(false);
-    navigation.goBack();
+    Alert.alert('Do you want to delete this post?', '', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          deletePostFromDB(id);
+          navigation.goBack();
+        }
+      },
+    ]);
   };
 
   const handleEditItem = () => {
