@@ -168,15 +168,18 @@ const styles = StyleSheet.create({
   },
   searchAndSortContainer: {
     flexDirection: "row",
+    justifyContent:'space-between',
+    marginRight:20,
   },
   searchBarContainer: {
     width: "80%",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: 'center',
     borderRadius: 5,
     height: 40,
     borderWidth: 0.2,
     marginLeft: 20,
+    justifyContent: "space-between",
   },
   text: {
     fontSize: 16,
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
     top: 30,
   },
   search: {
-    position: "absolute",
+    //position: "absolute",
     width: "76%",
     left: 40,
     right: 20,
@@ -206,8 +209,9 @@ const styles = StyleSheet.create({
   closeIcon: {
     height: 30,
     width: 30,
-    left: 300,
+    //left: 300,
     opacity: 0.5,
+    //ijustifyContent:'flex-end',
   },
   sortContainer: {
     marginRight: 20,
