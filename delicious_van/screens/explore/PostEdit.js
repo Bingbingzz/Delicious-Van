@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, TextInput, StyleSheet, Text } from "react-native";
 import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
@@ -13,9 +13,9 @@ export default function PostEdit({ route, navigation }) {
   const [newDescription, setNewDescription] = useState(description);
   const [images, setImages] = useState(imageUrls);
 
-  const handleImageDelete = (index) => {
+  const handleImageDelete = useCallback((index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  };
+  }, [images]);
 
   const handleSave = () => {
     const updatedPost = {

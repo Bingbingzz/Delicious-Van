@@ -1,5 +1,5 @@
 import { View, TextInput, StyleSheet, Text, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
 import { writePostToDB } from "../../firebase/firestoreHelper";
@@ -11,9 +11,9 @@ export default function PostAdd({ navigation }) {
   const [isValid, setIsValid] = useState(true);
   const [images, setImages] = useState([]);
 
-  const handleImageDelete = (index) => {
+  const handleImageDelete = useCallback((index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  };
+  }, [images]);
 
   const handleSubmit = async () => {
     if (!title || !description) {
@@ -34,6 +34,13 @@ export default function PostAdd({ navigation }) {
     } catch (error) {
       // console.log(error.message);
     }
+
+    // reset state
+    setTitle('');
+    setDescription('');
+    setIsValid(true);
+    setImages([]);
+    
     navigation.goBack();
   };
 

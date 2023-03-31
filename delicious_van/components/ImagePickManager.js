@@ -12,7 +12,7 @@ import React from "react";
 import PressableButton from "./PressableButton";
 import * as ImagePicker from "expo-image-picker";
 
-export default function ImagePickManager({
+function ImagePickManager({
   images,
   setImages,
   handleImageDelete,
@@ -82,6 +82,8 @@ export default function ImagePickManager({
     </View>
   );
 }
+
+export default React.memo(ImagePickManager);
 
 const styles = StyleSheet.create({
   container: {
