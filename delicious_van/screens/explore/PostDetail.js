@@ -1,28 +1,52 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, ActionSheetIOS } from 'react-native';
-import PressableButton from '../../components/PressableButton';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
-import { Menu } from 'react-native-paper';
-import { deletePostFromDB, getPostFromDB } from '../../firebase/firestoreHelper';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  ActionSheetIOS,
+  Dimensions,
+  TextInput,
+  Alert,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
+import PressableButton from "../../components/PressableButton";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { Menu } from "react-native-paper";
+import {
+  deletePostFromDB,
+  getPostFromDB,
+  updatePostInDB,
+} from "../../firebase/firestoreHelper";
+import { auth } from "../../firebase/firebase-setup";
+import colors from "../../colors";
+import Avatar from "../../assets/avatar.png";
 
-const defaultImage = 'https://i.ibb.co/JtS24qP/default-image.jpg';
+const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
+
+const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
 
 export default function PostDetail({ route }) {
   const { post } = route.params;
   const navigation = useNavigation();
-  const [menuVisible, setMenuVisible] = useState(false)
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
   const { title, imageUrls, description, id } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const fetchPostData = async () => {
     const updatedPost = await getPostFromDB(id);
+    console.log(updatedPost);
     if (updatedPost) {
       setPostData(updatedPost);
     }
   };
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       fetchPostData();
     });
 
@@ -40,7 +64,7 @@ export default function PostDetail({ route }) {
               customizedStyle={styles.button}
               buttonPressed={handleMenuPress}
             >
-              <Ionicons name="menu-sharp" size={24} color="white" />
+              <Icon name="more-horiz" size={24} color="white" />
             </PressableButton>
           }
         >
@@ -51,54 +75,275 @@ export default function PostDetail({ route }) {
     });
   }, [navigation, menuVisible]);
 
-
-
   const handleMenuPress = () => {
     setMenuVisible(!menuVisible);
   };
 
   const handleDeleteItem = () => {
-    deletePostFromDB(id);
     setMenuVisible(false);
-    navigation.goBack();
+    Alert.alert("Do you want to delete this post?", "", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          deletePostFromDB(id);
+          navigation.goBack();
+        },
+      },
+    ]);
   };
 
   const handleEditItem = () => {
     setMenuVisible(false);
-    navigation.navigate('PostEdit', { post });
+    navigation.navigate("PostEdit", { post });
+  };
+
+  const sendComment = () => {
+    // create new comment
+    const newComment = {
+      userEmail: auth.currentUser.email,
+      userId: auth.currentUser.uid,
+      content: comment,
+      date: Date.now(),
+    };
+    // add the new comment to post comment list
+    if (postData.comments) {
+      postData.comments.push(newComment);
+    } else {
+      postData.comments = [newComment];
+    }
+    // update post
+    updatePostInDB(id, postData).then(() => {
+      setPostData({ ...postData });
+      // reset comment input
+      setComment("");
+    });
+  };
+
+  const likeComment = () => {
+    if (postData.likes && postData.likes.includes(auth.currentUser.uid)) {
+      // remove user from post like list
+      postData.likes = postData.likes.filter(
+        (item) => item !== auth.currentUser.uid
+      );
+    } else {
+      // add user to post like list
+      if (postData.likes) {
+        postData.likes.push(auth.currentUser.uid);
+      } else {
+        postData.likes = [auth.currentUser.uid];
+      }
+    }
+    // update post
+    updatePostInDB(id, postData).then(() => {
+      setPostData({ ...postData });
+    });
+  };
+
+  const deleteComment = (index) => {
+    Alert.alert("Do you want to delete this comment?", "", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          postData.comments.splice(index);
+          // update post
+          updatePostInDB(id, postData).then(() => {
+            setPostData({ ...postData });
+          });
+        },
+      },
+    ]);
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
+        <View style={styles.top}>
+          <Image source={Avatar} style={styles.avatar} />
+          <Text style={styles.email}>{auth.currentUser.email}</Text>
+        </View>
         <Image source={{ uri: displayImage }} style={styles.image} />
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
+        <View style={styles.bottom}>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.input}
+              value={comment}
+              placeholder="Say something here"
+              onChangeText={(newComment) => {
+                setComment(newComment);
+              }}
+            />
+            <TouchableOpacity onPress={sendComment}>
+              <Icon name="send" size={24} color="#b1b1b1" />
+            </TouchableOpacity>
+          </View>
+          <View customizedStyle={styles.button}>
+            <TouchableOpacity onPress={likeComment}>
+              <View style={styles.likeWrapper}>
+                {postData.likes &&
+                postData.likes.includes(auth.currentUser.uid) ? (
+                  <Icon name="favorite" size={24} />
+                ) : (
+                  <Icon name="favorite-border" size={24} />
+                )}
+                {postData.likes && postData.likes.length > 0 && (
+                  <Text style={styles.badge}>{postData.likes.length}</Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.commentsList}>
+          {postData.comments &&
+            postData.comments.map((comment, index) => (
+              <View key={index} style={styles.commentItem}>
+                <View>
+                  <Text>{comment.userEmail}</Text>
+                  <Text style={styles.commentDate}>
+                    {new Date(comment.date).toLocaleString()}
+                  </Text>
+                </View>
+                <View>
+                  <Text>{comment.content}</Text>
+                </View>
+                <View style={styles.commentActions}>
+                  <TouchableOpacity onPress={() => deleteComment(index)}>
+                    <Icon name="close" size={18} color="#c75450" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+        </View>
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    // minHeight: windowHeight,
+    backgroundColor: colors.pageContentBgColor,
+  },
+
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: colors.pageContentBgColor,
     shadowColor: "#000",
+    padding: 16,
   },
+
+  top: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+
   image: {
-    width: '100%',
-    height: 250,
-    resizeMode: 'cover',
+    width: "100%",
+    height: windowHeight * 0.5,
+    resizeMode: "cover",
+    borderRadius: 12,
   },
+
+  avatar: {
+    width: 50,
+    height: 50,
+    marginRight: 5,
+  },
+
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    padding: 16,
+    fontWeight: "bold",
+    // padding: 16,
   },
+
+  email: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+
   description: {
     fontSize: 16,
-    padding: 16,
-    paddingBottom: 32,
+    // padding: 16,
+    paddingBottom: 20,
     lineHeight: 24,
+    marginTop: 6,
+  },
+
+  bottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  inputWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#f1f1f1",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+  },
+
+  input: {
+    width: windowWidth / 2,
+  },
+
+  commentsList: {
+    marginVertical: 20,
+  },
+
+  commentItem: {
+    position: "relative",
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    borderBottomWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#e1e1e1",
+    marginBottom: 10,
+  },
+
+  commentDate: {
+    fontSize: 13,
+    color: "#b1b1b1",
+    marginTop: 4,
+    marginBottom: 5,
+  },
+
+  likeWrapper: {
+    position: "relative",
+  },
+
+  badge: {
+    width: 15,
+    height: 15,
+    backgroundColor: "red",
+    color: "white",
+    textAlign: "center",
+    lineHeight: 15,
+    borderRadius: 15,
+    position: "absolute",
+    right: -5,
+    top: -5,
+    fontSize: 12,
+  },
+
+  commentActions: {
+    position: "absolute",
+    top: 5,
+    right: 5,
   },
 });

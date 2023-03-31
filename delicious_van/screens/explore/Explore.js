@@ -9,18 +9,18 @@ import PostGallery from '../../components/PostGallery';
 const Stack = createNativeStackNavigator();
 
 export default function Explore({ navigation }) {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <PressableButton
-          customizedStyle={styles.button}
-          buttonPressed={() => navigation.navigate('PostAdd')}
-        >
-          <Ionicons name="add" size={24} color="white" />
-        </PressableButton>
-      ),
-    });
-  }, [navigation]);
+  // React.useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <PressableButton
+  //         customizedStyle={styles.button}
+  //         buttonPressed={() => navigation.navigate('PostAdd')}
+  //       >
+  //         <Ionicons name="add" size={24} color="white" />
+  //       </PressableButton>
+  //     ),
+  //   });
+  // }, [navigation]);
 
   return (
     <View style={styles.container}>
