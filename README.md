@@ -7,9 +7,7 @@ Authors: Anabelle Sun, Alyn Xu, Ce Zhao
 - npm start
 
 ## Project description
-  Introducing our innovative food review app! With two main functions, Restaurants and Explore, this app provides an easy and convenient way to share your thoughts and opinions on your dining experiences.
-
-  With the Restaurants function, you can access a comprehensive database of registered restaurants, complete with menu information, address, and phone numbers. You can write reviews and provide ratings, which will be displayed in the restaurant's review section for other users to read and consider.
+  Introducing our innovative food review app! The main function of our app is Explore, this app provides an easy and convenient way to share your thoughts and opinions on your dining experiences.
 
   The Explore function is perfect for discovering new places to dine. Here, you can share reviews and ratings for restaurants that are not yet registered in our app. Other users can view these reviews in the Explore section, helping them make informed decisions about where to eat.
 
@@ -24,10 +22,10 @@ Authors: Anabelle Sun, Alyn Xu, Ce Zhao
 ## Iteration1
 ### Main function implemented
 - Login/Register/Logout
-- Search posts by title
-- Create/Delete/Edit/Read post to firestore
-- Post/Delete Comments
-- Tag like
+- Post (enable user to create/read/update/delete post to firestore)
+- Comments (enable user to create comments under the posts)
+- Search posts by title (enable user to search keywords then display the realated posts)
+
 ### Demo:
 
 
