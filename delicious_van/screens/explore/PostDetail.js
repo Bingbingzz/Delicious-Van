@@ -24,6 +24,7 @@ import {
 import { auth } from "../../firebase/firebase-setup";
 import colors from "../../colors";
 import Avatar from "../../assets/avatar.png";
+import { KeyboardShift } from "../../components/KeyboardShift";
 
 const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
 
@@ -36,7 +37,7 @@ export default function PostDetail({ route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
-  const { title, imageUrls, description, id } = postData;
+  const { title, imageUrls, description, id, userId } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const fetchPostData = async () => {
     const updatedPost = await getPostFromDB(id);
@@ -55,23 +56,24 @@ export default function PostDetail({ route }) {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <Menu
-          visible={menuVisible}
-          onDismiss={handleMenuPress}
-          anchor={
-            <PressableButton
-              customizedStyle={styles.button}
-              buttonPressed={handleMenuPress}
-            >
-              <Icon name="more-horiz" size={24} color="white" />
-            </PressableButton>
-          }
-        >
-          <Menu.Item onPress={handleDeleteItem} title="Delete Item" />
-          <Menu.Item onPress={handleEditItem} title="Edit Item" />
-        </Menu>
-      ),
+      headerRight: () =>
+        userId === auth.currentUser.uid && (
+          <Menu
+            visible={menuVisible}
+            onDismiss={handleMenuPress}
+            anchor={
+              <PressableButton
+                customizedStyle={styles.button}
+                buttonPressed={handleMenuPress}
+              >
+                <Icon name="more-horiz" size={24} color="white" />
+              </PressableButton>
+            }
+          >
+            <Menu.Item onPress={handleDeleteItem} title="Delete Item" />
+            <Menu.Item onPress={handleEditItem} title="Edit Item" />
+          </Menu>
+        ),
     });
   }, [navigation, menuVisible]);
 
@@ -176,14 +178,16 @@ export default function PostDetail({ route }) {
         <Text style={styles.description}>{description}</Text>
         <View style={styles.bottom}>
           <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              value={comment}
-              placeholder="Say something here"
-              onChangeText={(newComment) => {
-                setComment(newComment);
-              }}
-            />
+            <KeyboardShift>
+              <TextInput
+                style={styles.input}
+                value={comment}
+                placeholder="Say something here"
+                onChangeText={(newComment) => {
+                  setComment(newComment);
+                }}
+              />
+            </KeyboardShift>
             <TouchableOpacity onPress={sendComment}>
               <Icon name="send" size={24} color="#b1b1b1" />
             </TouchableOpacity>
@@ -193,7 +197,7 @@ export default function PostDetail({ route }) {
               <View style={styles.likeWrapper}>
                 {postData.likes &&
                 postData.likes.includes(auth.currentUser.uid) ? (
-                  <Icon name="favorite" size={24} />
+                  <Icon name="favorite" size={24} color="#fe2542" />
                 ) : (
                   <Icon name="favorite-border" size={24} />
                 )}
@@ -218,9 +222,11 @@ export default function PostDetail({ route }) {
                   <Text>{comment.content}</Text>
                 </View>
                 <View style={styles.commentActions}>
-                  <TouchableOpacity onPress={() => deleteComment(index)}>
-                    <Icon name="close" size={18} color="#c75450" />
-                  </TouchableOpacity>
+                  {comment.userId === auth.currentUser.uid && (
+                    <TouchableOpacity onPress={() => deleteComment(index)}>
+                      <Icon name="close" size={18} color="#c75450" />
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             ))}
@@ -295,6 +301,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 12,
+    flex: 1,
+    marginRight: 50,
   },
 
   input: {
@@ -325,20 +333,24 @@ const styles = StyleSheet.create({
 
   likeWrapper: {
     position: "relative",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   badge: {
-    width: 15,
-    height: 15,
-    backgroundColor: "red",
-    color: "white",
-    textAlign: "center",
-    lineHeight: 15,
-    borderRadius: 15,
-    position: "absolute",
-    right: -5,
-    top: -5,
-    fontSize: 12,
+    // width: 15,
+    // height: 15,
+    // backgroundColor: "red",
+    // color: "white",
+    // textAlign: "center",
+    // lineHeight: 15,
+    // borderRadius: 15,
+    // position: "absolute",
+    // right: -5,
+    // top: -5,
+    // fontSize: 12,
+    color: '#333',
+    marginLeft: 4,
   },
 
   commentActions: {

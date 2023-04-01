@@ -4,6 +4,7 @@ import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
 import { writePostToDB } from "../../firebase/firestoreHelper";
 import ImagePickManager from "../../components/ImagePickManager";
+import {auth} from "../../firebase/firebase-setup";
 
 export default function PostAdd({ navigation }) {
   const [title, setTitle] = useState("");
@@ -30,6 +31,7 @@ export default function PostAdd({ navigation }) {
         title: title,
         description: description,
         images: images,
+        userId: auth.currentUser.uid
       });
     } catch (error) {
       // console.log(error.message);
