@@ -30,8 +30,7 @@ Authors: Anabelle Sun, Alyn Xu, Ce Zhao
 ### Demo:
 
 
-https://user-images.githubusercontent.com/90569729/229250475-f47dd3c1-8965-47da-826a-7d7c33a94377.MOV
-
+https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6-bc7a-c41efde36ecb.mp4
 
 
 ## Iteration2
