@@ -31,7 +31,8 @@ export default function PostAdd({ navigation }) {
         title: title,
         description: description,
         images: images,
-        userId: auth.currentUser.uid
+        userId: auth.currentUser.uid,
+        userEmail: auth.currentUser.email
       });
     } catch (error) {
       // console.log(error.message);
