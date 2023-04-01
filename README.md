@@ -24,6 +24,7 @@ Authors: Anabelle Sun, Alyn Xu, Ce Zhao
 - Login/Register/Logout
 - Post (enable user to create/read/update/delete post to firestore)
 - Comments (enable user to create comments under the posts)
+- Likes (enable user to favorite the posts and display the count of likes of that post)
 - Search posts by title (enable user to search keywords then display the realated posts)
 
 ### Demo:
