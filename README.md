@@ -22,8 +22,8 @@ Authors: Anabelle Sun, Alyn Xu, Ce Zhao
 ## Iteration1
 ### Main function implemented
 - Login/Register/Logout
-- Post (enable user to create/read/update/delete post to firestore)
-- Comments (enable user to create comments under the posts)
+- Post (enable user to create/read/update/delete post to firestore, users are ONLY allowed to edit/delete their own posts)
+- Comments (enable user to create/delete comments under the posts, users are ONLY allowed to delete their own posts)
 - Likes (enable user to favorite the posts and display the count of likes of that post)
 - Search posts by title (enable user to search keywords then display the realated posts)
 
