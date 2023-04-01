@@ -7,7 +7,7 @@ import ImagePickManager from "../../components/ImagePickManager";
 
 export default function PostEdit({ route, navigation }) {
   const { post } = route.params;
-  const { title, imageUrls, description, id } = post;
+  const { title, imageUrls, description, id, userId, userEmail } = post;
 
   const [newTitle, setNewTitle] = useState(title);
   const [newDescription, setNewDescription] = useState(description);
@@ -21,7 +21,7 @@ export default function PostEdit({ route, navigation }) {
     const updatedPost = {
       title: newTitle,
       description: newDescription,
-      imageUrls: images,
+      imageUrls: images, userId, userEmail
     };
     updatePostInDB(id, updatedPost);
     navigation.goBack();
