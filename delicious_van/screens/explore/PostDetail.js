@@ -42,7 +42,6 @@ export default function PostDetail({ route }) {
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const fetchPostData = async () => {
     const updatedPost = await getPostFromDB(id);
-    console.log(updatedPost);
     if (updatedPost) {
       setPostData(updatedPost);
     }

@@ -73,7 +73,7 @@ export async function updatePostInDB(postId, updatedPost) {
     try {
         const entryRef = doc(firestore, 'posts', postId);
         await updateDoc(entryRef, updatedPost);
-        console.log('Document updated successfully');
+    
     } catch (err) {
         console.log(err);
     }
