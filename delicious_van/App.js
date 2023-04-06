@@ -12,7 +12,7 @@ import Login from './screens/welcome/Login';
 import SignUp from './screens/welcome/SignUp';
 import Welcome from './screens/welcome/Welcome';
 import BottomTab from './components/BottomTab';
-import LocationPicker from './screens/explore/LcoationPicker';
+import LocationPicker from './screens/explore/LocationPicker';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();

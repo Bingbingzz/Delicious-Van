@@ -4,7 +4,15 @@ import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 
 export default function LocationPicker({ navigation, route }) {
+    const { currentLocation, sendLocation, postAddLocation } = route.params;
     const [selectedLocation, setSelectedLocation] = useState(null);
+
+    const handleLocationConfirmation = () => {
+        postAddLocation(selectedLocation)
+        sendLocation(selectedLocation);
+        navigation.goBack();
+    };
+
     return (
         <>
             <MapView
@@ -16,29 +24,24 @@ export default function LocationPicker({ navigation, route }) {
                 }}
                 style={styles.container}
                 initialRegion={{
-                    latitude: route.params
-                        ? route.params.currentLocation.latitude
-                        : 37.78825,
-                    longitude: route.params
-                        ? route.params.currentLocation.longitude
-                        : -122.4324,
+                    latitude: currentLocation ? currentLocation.latitude : 37.78825,
+                    longitude: currentLocation ? currentLocation.longitude : -122.4324,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
             >
-
-                <Marker coordinate={selectedLocation} />
+                {selectedLocation && <Marker title="Here!" coordinate={selectedLocation} />}
             </MapView>
             <Button
-                title="confirm selected location"
+                title="Confirm selected location"
                 disabled={!selectedLocation}
-                onPress={() => {
-                    navigation.goBack();
-                }}
+                onPress={handleLocationConfirmation}
             />
         </>
     );
 }
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

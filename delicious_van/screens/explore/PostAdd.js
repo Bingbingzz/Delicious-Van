@@ -96,12 +96,15 @@ export default function PostAdd({ navigation }) {
           Please enter a valid description
         </Text>
       )}
+      <View style={{ alignSelf: "left" }}>
+        <LocationManager sendLocation={setLocation} />
+      </View>
       <ImagePickManager
         images={images}
         setImages={setImages}
         handleImageDelete={handleImageDelete}
       />
-      <LocationManager sendLocation={setLocation} />
+
       <View style={styles.bottomContainer}>
         <PressableButton
           buttonPressed={handleSubmit}

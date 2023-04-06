@@ -1,31 +1,42 @@
 
-
-import { View, Image, Alert, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import PressableButton from "./PressableButton";
+import {
+    View,
+    Image,
+    Alert,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+} from "react-native";
+import Modal from "react-native-modal";
 import * as Location from "expo-location";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MAPS_API_KEY } from "@env";
 import colors from "../colors";
+import PressableButton from "./PressableButton";
 
 export default function LocationManager({ sendLocation }) {
     const navigation = useNavigation();
     const route = useRoute();
 
+    const [isModalVisible, setModalVisible] = useState(false);
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
     const [permissionResponse, requestPermission] =
         Location.useForegroundPermissions();
     const [location, setLocation] = useState(null);
-    useEffect(() => {
-        async function fetchUserInfo() {
-            try {
-                const data = await getUserInfo();
-                setLocation(data.location);
-            } catch (err) {
-                console.log("fetch user info ", err);
-            }
-        }
-        fetchUserInfo();
-    }, []);
+    // useEffect(() => {
+    //     async function fetchUserInfo() {
+    //         try {
+    //             const data = await getUserInfo();
+    //             setLocation(data.location);
+    //         } catch (err) {
+    //             console.log("fetch user info ", err);
+    //         }
+    //     }
+    //     fetchUserInfo();
+    // }, []);
     useEffect(() => {
         if (route.params) {
             setLocation(route.params.selectedLocation);
@@ -54,6 +65,8 @@ export default function LocationManager({ sendLocation }) {
                 latitude: result.coords.latitude,
                 longitude: result.coords.longitude,
             });
+            sendLocation(location);
+            setModalVisible(false);
         } catch (err) {
             console.log("locate user error ", err);
         }
@@ -61,22 +74,45 @@ export default function LocationManager({ sendLocation }) {
     function locationSelectHandler() {
         // navigate to Map.js
         if (location) {
-            navigation.navigate("LocationPicker", { currentLocation: location });
+            navigation.navigate("LocationPicker", { currentLocation: location, sendLocation: sendLocation, postAddLocation: setLocation });
+            setModalVisible(false);
         } else {
-            navigation.navigate("LocationPicker");
+            navigation.navigate("LocationPicker", { currentLocation: location, sendLocation: sendLocation, postAddLocation: setLocation });
+            setModalVisible(false);
         }
     }
     function locationSaveHandler() {
         sendLocation(location);
+        setModalVisible(false);
     }
     return (
         <View>
-            <PressableButton
-                customizedStyle={styles.button}
-                buttonPressed={locateUserHandler}
-            >
-                <Text>Use My Current Location</Text>
-            </PressableButton>
+            <TouchableOpacity onPress={toggleModal} style={styles.menuButton}>
+                <Text style={styles.menuButtonText}>Select Location</Text>
+            </TouchableOpacity>
+            <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+                <View style={styles.modalContent}>
+                    <PressableButton
+                        customizedStyle={styles.button}
+                        buttonPressed={locateUserHandler}
+                    >
+                        <Text>Use My Current Location</Text>
+                    </PressableButton>
+
+                    <PressableButton
+                        customizedStyle={styles.button}
+                        buttonPressed={locationSelectHandler}
+                    >
+                        <Text>Let me choose!</Text>
+                    </PressableButton>
+                    {/* {location && (<PressableButton
+                        customizedStyle={styles.button}
+                        buttonPressed={locationSaveHandler}
+                    >
+                        <Text>Save Location!</Text>
+                    </PressableButton>)} */}
+                </View>
+            </Modal>
             {location && (
                 <Image
                     source={{
@@ -85,24 +121,30 @@ export default function LocationManager({ sendLocation }) {
                     style={{ width: "100%", height: 200 }}
                 />
             )}
-            <PressableButton
-                customizedStyle={styles.button}
-                buttonPressed={locationSelectHandler}
-            >
-                <Text>Let me choose!</Text>
-            </PressableButton>
-            {location && (<PressableButton
-                customizedStyle={styles.button}
-                buttonPressed={locationSaveHandler}
-            >
-                <Text>Save Location!</Text>
-            </PressableButton>)}
-
         </View>
     );
 }
 
 const styles = {
+    menuButton: {
+        backgroundColor: colors.buttonBackground,
+        borderRadius: 5,
+        height: 40,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 10,
+        margin: 10,
+    },
+    menuButtonText: {
+        color: colors.white,
+        fontSize: 16,
+    },
+    modalContent: {
+        backgroundColor: "white",
+        padding: 22,
+        borderRadius: 10,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+    },
     button: {
         backgroundColor: colors.buttonBackground,
         borderRadius: 5,
