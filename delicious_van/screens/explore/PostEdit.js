@@ -47,6 +47,9 @@ export default function PostEdit({ route, navigation }) {
           placeholder="Write your post content"
         />
       </View>
+      <View style={{ alignSelf: "left" }}>
+        <LocationManager sendLocation={setNewLocation} currentLocation={location} />
+      </View>
       <ImagePickManager
         images={images}
         setImages={setImages}
@@ -59,8 +62,6 @@ export default function PostEdit({ route, navigation }) {
         >
           <Text style={styles.buttonText}>Save</Text>
         </PressableButton>
-        {/* let user choose location here and save the location info to the post detail*/}
-        <LocationManager sendLocation={setNewLocation}/>
       </View>
     </View>
   );

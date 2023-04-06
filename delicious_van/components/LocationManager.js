@@ -15,7 +15,7 @@ import { MAPS_API_KEY } from "@env";
 import colors from "../colors";
 import PressableButton from "./PressableButton";
 
-export default function LocationManager({ sendLocation }) {
+export default function LocationManager({ sendLocation, currentLocation }) {
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -25,18 +25,8 @@ export default function LocationManager({ sendLocation }) {
     };
     const [permissionResponse, requestPermission] =
         Location.useForegroundPermissions();
-    const [location, setLocation] = useState(null);
-    // useEffect(() => {
-    //     async function fetchUserInfo() {
-    //         try {
-    //             const data = await getUserInfo();
-    //             setLocation(data.location);
-    //         } catch (err) {
-    //             console.log("fetch user info ", err);
-    //         }
-    //     }
-    //     fetchUserInfo();
-    // }, []);
+    const [location, setLocation] = useState(currentLocation);
+
     useEffect(() => {
         if (route.params) {
             setLocation(route.params.selectedLocation);
@@ -72,7 +62,6 @@ export default function LocationManager({ sendLocation }) {
         }
     }
     function locationSelectHandler() {
-        // navigate to Map.js
         if (location) {
             navigation.navigate("LocationPicker", { currentLocation: location, sendLocation: sendLocation, postAddLocation: setLocation });
             setModalVisible(false);
@@ -113,13 +102,18 @@ export default function LocationManager({ sendLocation }) {
                     </PressableButton>)} */}
                 </View>
             </Modal>
-            {location && (
-                <Image
+            {(location ?
+                (<Image
                     source={{
                         uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
                     }}
-                    style={{ width: "100%", height: 200 }}
-                />
+                    style={styles.mapPreview}
+                />) : (<Image
+                    source={{
+                        uri: `https://maps.googleapis.com/maps/api/staticmap?center=${currentLocation.latitude},${currentLocation.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${currentLocation.latitude},${currentLocation.longitude}&key=${MAPS_API_KEY}`,
+                    }}
+                    style={styles.mapPreview}
+                />)
             )}
         </View>
     );
@@ -152,7 +146,10 @@ const styles = {
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
-        // margin: 8,
         padding: 10,
     },
+    mapPreview: {
+        width: 200,
+        height: 150,
+    }
 }

@@ -97,7 +97,7 @@ export default function PostAdd({ navigation }) {
         </Text>
       )}
       <View style={{ alignSelf: "left" }}>
-        <LocationManager sendLocation={setLocation} />
+        <LocationManager sendLocation={setLocation} currentLocation={null} />
       </View>
       <ImagePickManager
         images={images}
