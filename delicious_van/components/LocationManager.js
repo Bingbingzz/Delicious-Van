@@ -63,6 +63,7 @@ export default function LocationManager({ sendLocation, currentLocation }) {
     }
     function locationSelectHandler() {
         if (location) {
+
             navigation.navigate("LocationPicker", { currentLocation: location, sendLocation: sendLocation, postAddLocation: setLocation });
             setModalVisible(false);
         } else {
@@ -108,12 +109,12 @@ export default function LocationManager({ sendLocation, currentLocation }) {
                         uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
                     }}
                     style={styles.mapPreview}
-                />) : (<Image
+                />) : (currentLocation ? (<Image
                     source={{
                         uri: `https://maps.googleapis.com/maps/api/staticmap?center=${currentLocation.latitude},${currentLocation.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${currentLocation.latitude},${currentLocation.longitude}&key=${MAPS_API_KEY}`,
                     }}
                     style={styles.mapPreview}
-                />)
+                />) : <></>)
             )}
         </View>
     );
