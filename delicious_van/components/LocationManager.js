@@ -55,7 +55,10 @@ export default function LocationManager({ sendLocation, currentLocation }) {
                 latitude: result.coords.latitude,
                 longitude: result.coords.longitude,
             });
-            sendLocation(location);
+            sendLocation({
+                latitude: result.coords.latitude,
+                longitude: result.coords.longitude,
+            });
             setModalVisible(false);
         } catch (err) {
             console.log("locate user error ", err);

@@ -40,6 +40,8 @@ export default function PostDetail({ route }) {
   const [postData, setPostData] = useState(post);
   const { title, imageUrls, description, id, userId, userEmail, location } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
+  const [mapImageKey, setMapImageKey] = useState(0);
+
   const fetchPostData = async () => {
     const updatedPost = await getPostFromDB(id);
     if (updatedPost) {
@@ -50,9 +52,12 @@ export default function PostDetail({ route }) {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchPostData();
     });
-
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    setMapImageKey((prevKey) => prevKey + 1);
+  }, [location]);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -180,12 +185,14 @@ export default function PostDetail({ route }) {
           {/* show location map here! */}
           {location && (
             <Image
+              key={mapImageKey}
               source={{
                 uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
               }}
               style={{ width: "100%", height: 200 }}
             />
           )}
+
           <View style={styles.bottom}>
             <View style={styles.inputWrapper}>
               <TextInput
