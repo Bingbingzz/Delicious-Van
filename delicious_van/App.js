@@ -12,6 +12,7 @@ import Login from './screens/welcome/Login';
 import SignUp from './screens/welcome/SignUp';
 import Welcome from './screens/welcome/Welcome';
 import BottomTab from './components/BottomTab';
+import LocationPicker from './screens/explore/LocationPicker';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
@@ -42,6 +43,7 @@ const AppStack = (
     <Stack.Screen name="Explore" component={Explore} />
     <Stack.Screen name="PostDetail" component={PostDetail} />
     <Stack.Screen name="PostAdd" component={PostAdd} />
+    <Stack.Screen name="LocationPicker" component={LocationPicker} />
     <Stack.Screen name="PostEdit" component={PostEdit} />
     <Stack.Screen name="Comments" component={Comments} />
     <Stack.Screen name="Favorites" component={Favorites} />

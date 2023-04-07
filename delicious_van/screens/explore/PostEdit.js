@@ -4,15 +4,16 @@ import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
 import { updatePostInDB } from "../../firebase/firestoreHelper";
 import ImagePickManager from "../../components/ImagePickManager";
+import LocationManager from "../../components/LocationManager";
 
 export default function PostEdit({ route, navigation }) {
   const { post } = route.params;
-  const { title, imageUrls, description, id, userId, userEmail } = post;
+  const { title, imageUrls, description, id, userId, userEmail, location } = post;
 
   const [newTitle, setNewTitle] = useState(title);
   const [newDescription, setNewDescription] = useState(description);
   const [images, setImages] = useState(imageUrls);
-
+  const [newLocation, setNewLocation] = useState(location);
   const handleImageDelete = useCallback((index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   }, [images]);
@@ -21,7 +22,8 @@ export default function PostEdit({ route, navigation }) {
     const updatedPost = {
       title: newTitle,
       description: newDescription,
-      imageUrls: images, userId, userEmail
+      imageUrls: images, userId, userEmail,
+      location: newLocation,
     };
     updatePostInDB(id, updatedPost);
     navigation.goBack();
@@ -44,6 +46,9 @@ export default function PostEdit({ route, navigation }) {
           onChangeText={setNewDescription}
           placeholder="Write your post content"
         />
+      </View>
+      <View style={{ alignSelf: "left" }}>
+        <LocationManager sendLocation={setNewLocation} currentLocation={location} />
       </View>
       <ImagePickManager
         images={images}

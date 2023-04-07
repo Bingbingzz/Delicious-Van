@@ -55,7 +55,7 @@ export default function PostGallery({ txt }) {
       setData(tempList);
     }
   };
-  console.log(data)
+
   return (
     <View style={styles.container}>
       <Image

@@ -4,14 +4,14 @@ import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
 import { writePostToDB } from "../../firebase/firestoreHelper";
 import ImagePickManager from "../../components/ImagePickManager";
-import {auth} from "../../firebase/firebase-setup";
-
+import { auth } from "../../firebase/firebase-setup";
+import LocationManager from "../../components/LocationManager";
 export default function PostAdd({ navigation }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [images, setImages] = useState([]);
-
+  const [location, setLocation] = useState(null);
   const handleImageDelete = useCallback((index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   }, [images]);
@@ -32,7 +32,8 @@ export default function PostAdd({ navigation }) {
         description: description,
         images: images,
         userId: auth.currentUser.uid,
-        userEmail: auth.currentUser.email
+        userEmail: auth.currentUser.email,
+        location: location
       });
     } catch (error) {
       // console.log(error.message);
@@ -43,7 +44,7 @@ export default function PostAdd({ navigation }) {
     setDescription('');
     setIsValid(true);
     setImages([]);
-    
+    setLocation(null);
     navigation.goBack();
   };
 
@@ -52,6 +53,7 @@ export default function PostAdd({ navigation }) {
     setDescription("");
     setIsValid(true);
     setImage(null);
+    setLocation(null);
   };
 
   const handleTitleChange = (text) => {
@@ -94,11 +96,15 @@ export default function PostAdd({ navigation }) {
           Please enter a valid description
         </Text>
       )}
+      <View style={{ alignSelf: "left" }}>
+        <LocationManager sendLocation={setLocation} currentLocation={null} />
+      </View>
       <ImagePickManager
         images={images}
         setImages={setImages}
         handleImageDelete={handleImageDelete}
       />
+
       <View style={styles.bottomContainer}>
         <PressableButton
           buttonPressed={handleSubmit}
