@@ -2,6 +2,9 @@ import { Button, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
 
 export default function LocationPicker({ navigation, route }) {
     const { currentLocation, sendLocation, postAddLocation } = route.params;
