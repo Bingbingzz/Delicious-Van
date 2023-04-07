@@ -6,7 +6,7 @@ export default function Welcome({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.window}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>Welcome to Delicious Van!</Text>
         <View style={styles.buttonsContainer}>
           <PressableButton
             customizedStyle={styles.button}
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 20,
     padding: 10,
-    width: 100, // added width style to fix the length of the button
+    width: 100,
   },
   buttonText: {
     color: '#fff',
