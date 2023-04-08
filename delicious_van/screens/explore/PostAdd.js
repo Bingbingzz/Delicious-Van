@@ -52,7 +52,7 @@ export default function PostAdd({ navigation }) {
     setTitle("");
     setDescription("");
     setIsValid(true);
-    setImage(null);
+    setImages(null);
     setLocation(null);
   };
 
