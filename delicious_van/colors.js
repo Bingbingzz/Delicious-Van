@@ -9,7 +9,7 @@ const colors = {
     border: '#DDD',
     pressedButtonStyle: "#eeeeee",
     backgroundColor: '#FFFFFF',
-    pageCotentBgColor: "#FBF5EF",
+    pageContentBgColor: "#FBF5EF",
     buttonBackground: "#F5793B"
 };
 
