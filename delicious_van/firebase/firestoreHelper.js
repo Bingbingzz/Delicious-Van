@@ -55,7 +55,7 @@ export async function writePostToDB(post) {
         const postWithImages = { ...post, imageUrls };
 
         const docRef = await addDoc(collection(firestore, "posts"), postWithImages);
-        console.log("Document written with ID: ", docRef.id);
+       
     } catch (err) {
         console.log(err);
     }
@@ -73,7 +73,7 @@ export async function updatePostInDB(postId, updatedPost) {
     try {
         const entryRef = doc(firestore, 'posts', postId);
         await updateDoc(entryRef, updatedPost);
-        console.log('Document updated successfully');
+    
     } catch (err) {
         console.log(err);
     }

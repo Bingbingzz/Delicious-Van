@@ -25,6 +25,7 @@ import { auth } from "../../firebase/firebase-setup";
 import colors from "../../colors";
 import Avatar from "../../assets/avatar.png";
 import { KeyboardShift } from "../../components/KeyboardShift";
+import { MAPS_API_KEY } from "@env";
 
 const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
 
@@ -37,11 +38,12 @@ export default function PostDetail({ route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
-  const { title, imageUrls, description, id, userId, userEmail } = postData;
+  const { title, imageUrls, description, id, userId, userEmail, location } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
+  const [mapImageKey, setMapImageKey] = useState(0);
+
   const fetchPostData = async () => {
     const updatedPost = await getPostFromDB(id);
-    console.log(updatedPost);
     if (updatedPost) {
       setPostData(updatedPost);
     }
@@ -50,9 +52,12 @@ export default function PostDetail({ route }) {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchPostData();
     });
-
     return unsubscribe;
   }, [navigation]);
+
+  React.useEffect(() => {
+    setMapImageKey((prevKey) => prevKey + 1);
+  }, [location]);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -177,6 +182,17 @@ export default function PostDetail({ route }) {
           <Image source={{ uri: displayImage }} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
+          {/* show location map here! */}
+          {location && (
+            <Image
+              key={mapImageKey}
+              source={{
+                uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
+              }}
+              style={{ width: "100%", height: 200 }}
+            />
+          )}
+
           <View style={styles.bottom}>
             <View style={styles.inputWrapper}>
               <TextInput
@@ -196,7 +212,7 @@ export default function PostDetail({ route }) {
               <TouchableOpacity onPress={likeComment}>
                 <View style={styles.likeWrapper}>
                   {postData.likes &&
-                  postData.likes.includes(auth.currentUser.uid) ? (
+                    postData.likes.includes(auth.currentUser.uid) ? (
                     <Icon name="favorite" size={24} color="#fe2542" />
                   ) : (
                     <Icon name="favorite-border" size={24} />
