@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   sortClassificationContainer: {
     width: "80%",
-    height: 160,
+    height: 90,
     borderRadius: 10,
     borderWidth: 0.2,
     borderColor: colors.border,
