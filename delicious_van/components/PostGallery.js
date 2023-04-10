@@ -143,7 +143,7 @@ export default function PostGallery({ txt }) {
               onPress={() => {
                 setData(
                   data.sort(
-                    (a, b) =>b.time-a.time    
+                    (a, b) => b.time - a.time
                   )
                 );
                 setVisible(false);
@@ -151,7 +151,7 @@ export default function PostGallery({ txt }) {
             >
               <Text style={styles.text}>Sort by newest</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.classificaiton}
               onPress={() => setVisible(false)}
             >
@@ -162,7 +162,7 @@ export default function PostGallery({ txt }) {
               onPress={() => setVisible(false)}
             >
               <Text style={styles.text}>Sort by rating</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
