@@ -1,5 +1,5 @@
 # Delicious-Van
-Authors: Anabelle Sun, Alyn Xu, Ce Zhao
+Authors: Anabelle Sun @AnnabelleAB, Alyn Xu @alynxu, Ce Zhao @Bingbingzz
 
 ## Set up instruction: 
 - cd into the repo delicious_van
@@ -41,6 +41,7 @@ https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6
 - Improve post detail and edit layout and design @alynxu
 - Use **camera** to take picture when user edit post @alynxu
 - Implement local **notification** at everyday 4PM @Bingbingzz
+- Implement Sort by newest and hottest function @Bingbingzz
 
 ### Demo:
 
