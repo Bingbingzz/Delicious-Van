@@ -24,6 +24,8 @@ export default function PostEdit({ route, navigation }) {
       description: newDescription,
       imageUrls: images, userId, userEmail,
       location: newLocation,
+      time: Date.now(),
+      
     };
     updatePostInDB(id, updatedPost);
     navigation.goBack();

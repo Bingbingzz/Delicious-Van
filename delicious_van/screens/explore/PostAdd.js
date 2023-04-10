@@ -23,6 +23,7 @@ export default function PostAdd({ navigation }) {
         "Please enter a valid title and a description.",
         [{ text: "OK" }]
       );
+      
       return;
     }
 
@@ -33,7 +34,10 @@ export default function PostAdd({ navigation }) {
         images: images,
         userId: auth.currentUser.uid,
         userEmail: auth.currentUser.email,
-        location: location
+        location: location,
+        comments: [],
+        likes:[],
+        time : Date.now(),
       });
     } catch (error) {
       // console.log(error.message);
