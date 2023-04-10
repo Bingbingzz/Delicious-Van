@@ -26,7 +26,6 @@ export default function PostGallery({ txt }) {
       collection(firestore, "posts"),
       (querySnapshot) => {
         if (querySnapshot.empty) {
-          //setPosts([]);
           setData([]);
         } else {
           const fetchedPosts = querySnapshot.docs.map((doc) => {

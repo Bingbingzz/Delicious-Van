@@ -12,9 +12,12 @@ export default function PostAdd({ navigation }) {
   const [isValid, setIsValid] = useState(true);
   const [images, setImages] = useState([]);
   const [location, setLocation] = useState(null);
-  const handleImageDelete = useCallback((index) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  }, [images]);
+  const handleImageDelete = useCallback(
+    (index) => {
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    },
+    [images]
+  );
 
   const handleSubmit = async () => {
     if (!title || !description) {
@@ -44,8 +47,8 @@ export default function PostAdd({ navigation }) {
     }
 
     // reset state
-    setTitle('');
-    setDescription('');
+    setTitle("");
+    setDescription("");
     setIsValid(true);
     setImages([]);
     setLocation(null);
@@ -100,13 +103,14 @@ export default function PostAdd({ navigation }) {
           Please enter a valid description
         </Text>
       )}
-      <View style={{ alignSelf: "left" }}>
+      <View style={styles.location}>
         <LocationManager sendLocation={setLocation} currentLocation={null} />
       </View>
       <ImagePickManager
         images={images}
         setImages={setImages}
         handleImageDelete={handleImageDelete}
+        navigation={navigation}
       />
 
       <View style={styles.bottomContainer}>
@@ -190,5 +194,9 @@ const styles = StyleSheet.create({
 
   bottomContainer: {
     width: "100%",
+  },
+
+  location: {
+    alignSelf: "flex-start",
   },
 });

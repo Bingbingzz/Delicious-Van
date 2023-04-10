@@ -11,12 +11,16 @@ import colors from "../colors";
 import React from "react";
 import PressableButton from "./PressableButton";
 import * as ImagePicker from "expo-image-picker";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 function ImagePickManager({
   images,
   setImages,
   handleImageDelete,
+  navigation,
 }) {
+  const { showActionSheetWithOptions } = useActionSheet();
+
   const ImagePreview = ({ uri, onDelete }) => (
     <View style={styles.imagePreviewContainer}>
       <Image source={{ uri }} style={styles.image} resizeMode="cover" />
@@ -28,6 +32,37 @@ function ImagePickManager({
       </PressableButton>
     </View>
   );
+
+  const openActionSheet = () => {
+    const options = ["From Photos", "From Camera", "Cancel"];
+
+    showActionSheetWithOptions(
+      {
+        options,
+      },
+      (selectedIndex) => {
+        switch (selectedIndex) {
+          case 0:
+            // Save
+            handleImageSelect();
+            break;
+
+          case 1:
+            // Delete
+            navigation.navigate("CameraManager", { sendPhoto: sendPhoto });
+            break;
+
+          case 2:
+          // Canceled
+        }
+      }
+    );
+  };
+
+  const sendPhoto = (photo) => {
+    console.log(photo);
+    setImages((prevImages) => [...prevImages, photo.uri]);
+  };
 
   const handleImageSelect = async () => {
     if (images.length === 9) {
@@ -73,7 +108,7 @@ function ImagePickManager({
             horizontal
           />
         )}
-        <TouchableOpacity onPress={handleImageSelect}>
+        <TouchableOpacity onPress={openActionSheet}>
           <View style={styles.uploadBtn}>
             <Icon name="add" size={20} color={colors.gray} />
           </View>
