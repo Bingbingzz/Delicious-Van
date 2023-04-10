@@ -21,11 +21,12 @@ Authors: Anabelle Sun, Alyn Xu, Ce Zhao
 
 ## Iteration1
 ### Main function implemented
-- Login/Register/Logout
-- Post (enable user to create/read/update/delete post to firestore, users are ONLY allowed to edit/delete their own posts)
-- Comments (enable user to create/delete comments under the posts, users are ONLY allowed to delete their own posts)
-- Likes (enable user to favorite the posts and display the count of likes of that post)
-- Search posts by title (enable user to search keywords then display the realated posts)
+- Welcome page and Navigation Stack setup by @AnnabelleAB
+- Login/Register/Logout by @AnnabelleAB
+- Post (enable user to create/read/update/delete post to firestore, users are ONLY allowed to edit/delete their own posts) by @AnnabelleAB and @alynxu
+- Comments (enable user to create/delete comments under the posts, users are ONLY allowed to delete their own posts) by @alynxu
+- Likes (enable user to favorite the posts and display the count of likes of that post) by @alynxu
+- Search posts by title (enable user to search keywords then display the realated posts) by @Bingbingzz
 
 ### Demo:
 
@@ -34,4 +35,15 @@ https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6
 
 
 ## Iteration2
+### Main function implemented & Contribution
+- Welcome page & **Login/Register** updated @AnnabelleAB
+- Show **location** on post detail, select location on post add and post edit @AnnabelleAB
+- Improve post detail and edit layout and design @alynxu
+- Use **camera** to take picture when user edit post @alynxu
+- Implement local **notification** at everyday 4PM @Bingbingzz
+
+### Demo:
+
+
+
 ## Iteration3
