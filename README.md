@@ -44,7 +44,18 @@ https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6
 - Implement Sort by newest and hottest function @Bingbingzz
 
 ### Demo:
+- Sorting filter
+  - <img width="250" alt="image" src="https://user-images.githubusercontent.com/49429865/231046486-6cb4d783-bd50-44b7-892f-e3b14032692e.png">
+  
+- Location Use
+  - <img width="266" alt="image" src="https://user-images.githubusercontent.com/49429865/231046753-82804e4b-bea6-44af-bd81-cf391ef42cdf.png">
+  - <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231046695-97bc64a6-0eef-42f5-8948-c87fce72efd8.png">
 
-
-
+- Camera Use
+  -  <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231047000-d186c94c-01ef-44af-93b9-6907b10a103f.png">
+  -  <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231047349-e5cc1963-539d-4357-a8e0-fc82dd8d5270.png">
+  
+- Notification
+  -  <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231047455-055ebeee-54c4-4455-aea7-716532de0109.png">
+  -  <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231047571-b381c8c2-9538-4dff-a2fd-92a632603863.png">
 ## Iteration3
