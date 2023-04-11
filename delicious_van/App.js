@@ -19,10 +19,18 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 const Stack = createNativeStackNavigator();
 import { auth } from "./firebase/firebase-setup";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { Provider } from "react-native-paper";
-
-import colors from "./colors";
+import { Provider } from 'react-native-paper';
+import * as Notifications from "expo-notifications";
+import colors from './colors';
 import CameraManager from "./components/CameraManager";
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 const AuthStack = (
   <>
     <Stack.Screen
@@ -58,6 +66,12 @@ const AppStack = (
   </>
 );
 export default function App() {
+  useEffect(() => {
+    const subscrption = Notifications.addNotificationReceivedListener((notificaiton) => {
+      console.log(notificaiton);
+    });
+    return subscrption.remove();
+  }, []);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

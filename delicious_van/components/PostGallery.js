@@ -26,7 +26,6 @@ export default function PostGallery({ txt }) {
       collection(firestore, "posts"),
       (querySnapshot) => {
         if (querySnapshot.empty) {
-          // setPosts([]);
           setData([]);
         } else {
           const fetchedPosts = querySnapshot.docs.map((doc) => {
@@ -124,13 +123,31 @@ export default function PostGallery({ txt }) {
           <View style={styles.sortClassificationContainer}>
             <TouchableOpacity
               style={styles.classificaiton}
-              onPress={() => setVisible(false)}
+              onPress={() => {
+                setData(
+                  data.sort(
+                    (a, b) =>
+                      b.likes.length +
+                      b.comments.length -
+                      a.likes.length -
+                      a.comments.length
+                  )
+                );
+                setVisible(false);
+              }}
             >
-              <Text style={styles.text}>Sort by nearest</Text>
+              <Text style={styles.text}>Sort by hotest</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.classificaiton}
-              onPress={() => setVisible(false)}
+              onPress={() => {
+                setData(
+                  data.sort(
+                    (a, b) => b.time - a.time
+                  )
+                );
+                setVisible(false);
+              }}
             >
               <Text style={styles.text}>Sort by newest</Text>
             </TouchableOpacity>
@@ -138,7 +155,7 @@ export default function PostGallery({ txt }) {
               style={styles.classificaiton}
               onPress={() => setVisible(false)}
             >
-              <Text style={styles.text}>Sort by hotest</Text>
+              <Text style={styles.text}>Sort by nearest</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.classificaiton, { borderBottomWidth: 0 }]}
@@ -168,13 +185,13 @@ const styles = StyleSheet.create({
   },
   searchAndSortContainer: {
     flexDirection: "row",
-    justifyContent:'space-between',
-    marginRight:20,
+    justifyContent: "space-between",
+    marginRight: 20,
   },
   searchBarContainer: {
     width: "80%",
     flexDirection: "row",
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
     height: 40,
     borderWidth: 0.2,
