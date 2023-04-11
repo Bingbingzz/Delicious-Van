@@ -151,7 +151,7 @@ export default function PostGallery({ txt }) {
             >
               <Text style={styles.text}>Sort by newest</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.classificaiton}
               onPress={() => setVisible(false)}
             >
@@ -162,7 +162,7 @@ export default function PostGallery({ txt }) {
               onPress={() => setVisible(false)}
             >
               <Text style={styles.text}>Sort by rating</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   sortClassificationContainer: {
     width: "80%",
-    height: 160,
+    height: 85,
     borderRadius: 10,
     borderWidth: 0.2,
     borderColor: colors.border,
