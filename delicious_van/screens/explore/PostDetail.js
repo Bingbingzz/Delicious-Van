@@ -183,16 +183,19 @@ export default function PostDetail({ route }) {
           <Image source={{ uri: displayImage }} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
-          <Text style={styles.title}>Location</Text>
+
           {
             business && (
+
               <View style={styles.businessDetails}>
+                <Text style={styles.title}>Location</Text>
                 <Text style={styles.businessName}>{business.name}</Text>
                 <Text style={styles.businessAddress}>{business.location.address1}</Text>
               </View>
             )
           }
-          {location && (
+          {location && (<>
+            <Text style={styles.title}>User Selected Location</Text>
             <Image
               key={mapImageKey}
               source={{
@@ -200,6 +203,7 @@ export default function PostDetail({ route }) {
               }}
               style={{ width: "100%", height: 200 }}
             />
+          </>
           )}
 
 
@@ -387,6 +391,7 @@ const styles = StyleSheet.create({
   },
   businessDetails: {
     marginTop: 10,
+    marginBottom: 10,
   },
 
   businessName: {
