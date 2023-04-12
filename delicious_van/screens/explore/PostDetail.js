@@ -39,10 +39,10 @@ export default function PostDetail({ route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
-  const { title, imageUrls, description, id, userId, userEmail, location } = postData;
+  const { title, imageUrls, description, id, userId, userEmail, location, business } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const [mapImageKey, setMapImageKey] = useState(0);
-  const [selectedBusiness, setSelectedBusiness] = useState(null);
+
   const fetchPostData = async () => {
     const updatedPost = await getPostFromDB(id);
     if (updatedPost) {
@@ -183,7 +183,15 @@ export default function PostDetail({ route }) {
           <Image source={{ uri: displayImage }} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
-          {/* show location map here! */}
+          <Text style={styles.title}>Location</Text>
+          {
+            business && (
+              <View style={styles.businessDetails}>
+                <Text style={styles.businessName}>{business.name}</Text>
+                <Text style={styles.businessAddress}>{business.location.address1}</Text>
+              </View>
+            )
+          }
           {location && (
             <Image
               key={mapImageKey}
@@ -193,14 +201,7 @@ export default function PostDetail({ route }) {
               style={{ width: "100%", height: 200 }}
             />
           )}
-          {
-            selectedBusiness && (
-              <View style={styles.businessDetails}>
-                <Text style={styles.businessName}>{selectedBusiness.name}</Text>
-                <Text style={styles.businessAddress}>{selectedBusiness.location.address1}</Text>
-              </View>
-            )
-          }
+
 
           <View style={styles.bottom}>
             <View style={styles.inputWrapper}>
@@ -396,5 +397,17 @@ const styles = StyleSheet.create({
   businessAddress: {
     fontSize: 14,
     color: 'gray',
+  },
+  selectedBusinessContainer: {
+    marginTop: 10,
+  },
+
+  selectedBusinessName: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  selectedBusinessAddress: {
+    fontSize: 14,
   },
 });
