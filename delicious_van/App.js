@@ -62,9 +62,9 @@ const AppStack = (
     <Stack.Screen name="LocationPicker" component={LocationPicker} />
     <Stack.Screen name="PostEdit" component={PostEdit} />
     <Stack.Screen name="Comments" component={Comments} />
-    <Stack.Screen name="Favorites" component={Favorites} />
+    <Stack.Screen name="Favorites" component={Favorites} options={{ title: 'My Favorites' }} />
     <Stack.Screen name="UserProfile" component={UserProfile} />
-    <Stack.Screen name="ProfileEdit" component={ProfileEdit} options={{ title: 'Profile', headerTitleAlign: 'center' }} />
+    <Stack.Screen name="ProfileEdit" component={ProfileEdit} options={{ title: 'Profile' }} />
     <Stack.Screen name="CameraManager" component={CameraManager} />
   </>
 );

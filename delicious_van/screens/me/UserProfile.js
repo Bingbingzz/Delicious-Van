@@ -107,7 +107,7 @@ export default function UserProfile() {
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log(333)}>
+        <TouchableOpacity onPress={() => navigation.navigate('Favorites')}>
           <View style={styles.item}>
             <Text style={styles.itemText}>Favorites</Text>
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
