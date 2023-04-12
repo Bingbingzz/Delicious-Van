@@ -2,7 +2,7 @@ import { doc, setDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import { auth, firestore, storage } from "./firebase-setup";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
+import { updateProfile, updateEmail } from "firebase/auth";
 
 export async function getPostFromDB(id) {
   try {
@@ -65,23 +65,25 @@ export async function writePostToDB(post) {
 
 export const uploadImage = async (imageUri) => {
   try {
-      const normalizedUri = imageUri.startsWith("file://") ? imageUri : "file://" + imageUri;
-      const response = await fetch(normalizedUri);
-      const blob = await response.blob();
-      const random = Math.random() * 100000;
-      const storageRef = ref(storage, `images/${Date.now()}_${random}`);
-      const uploadTask = uploadBytesResumable(storageRef, blob);
-      uploadTask.on('state_changed', (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-      });
-      // Wait for the upload to complete
-      await uploadTask;
-      return getDownloadURL(storageRef);
+    const normalizedUri = imageUri.startsWith("file://")
+      ? imageUri
+      : "file://" + imageUri;
+    const response = await fetch(normalizedUri);
+    const blob = await response.blob();
+    const random = Math.random() * 100000;
+    const storageRef = ref(storage, `images/${Date.now()}_${random}`);
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+    uploadTask.on("state_changed", (snapshot) => {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log(`Upload is ${progress}% done`);
+    });
+    // Wait for the upload to complete
+    await uploadTask;
+    return getDownloadURL(storageRef);
   } catch (error) {
-      console.error('Error uploading image:', error);
-      console.error('Error payload:', error.serverResponse);
-      throw error;
+    console.error("Error uploading image:", error);
+    console.error("Error payload:", error.serverResponse);
+    throw error;
   }
 };
 
@@ -102,20 +104,10 @@ export async function updatePostInDB(postId, updatedPost) {
   }
 }
 
-export async function updateUserInDB(
-  userId,
-  username,
-  email,
-  location,
-  gender
-) {
+export async function updateUserInDB(username, email, location, gender) {
   try {
-    const entryRef = doc(firestore, "users", userId);
-    await updateDoc(entryRef, {
-      username,
-      email,
-      location,
-      gender,
+    await updateProfile(auth.currentUser, {
+      displayName: `${username}|${location}|${gender}|${email}`,
     });
   } catch (err) {
     console.log(err);
@@ -124,10 +116,10 @@ export async function updateUserInDB(
 
 export async function updateUserPictureInDB(url) {
   try {
-      await updateProfile(auth.currentUser, {
-          photoURL: url
-      });
+    await updateProfile(auth.currentUser, {
+      photoURL: url,
+    });
   } catch (err) {
-      console.log(err);
+    console.log(err);
   }
 }

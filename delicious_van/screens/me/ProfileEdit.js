@@ -4,16 +4,20 @@ import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
 import { auth } from "../../firebase/firebase-setup";
 import {updateUserInDB} from "../../firebase/firestoreHelper";
+import {useNavigation} from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 
 export default function ProfileEdit() {
-  console.log(auth.currentUser);
+  const navigation = useNavigation();
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState(auth.currentUser.email);
-  const [location, setLocation] = useState('');
-  const [gender, setGender] = useState('Male');
+  const displayName = auth.currentUser.displayName;
+  const displayNameArr = displayName ? displayName.split('|') : null;
+
+  const [username, setUsername] = useState(displayNameArr ? displayNameArr[0] : '');
+  const [email, setEmail] = useState(displayNameArr ? (displayNameArr[3] || auth.currentUser.email) : auth.currentUser.email);
+  const [location, setLocation] = useState(displayNameArr ? displayNameArr[1] : '');
+  const [gender, setGender] = useState(displayNameArr ? displayNameArr[2] : 'Male');
 
   const handleUsernameChange = (text) => {
     setUsername(text);
@@ -36,8 +40,8 @@ export default function ProfileEdit() {
       );
       return;
     }
-    // auth.currentUser.updateProfile()
-    // await updateUserInDB(auth.currentUser.uid, username, email, location, gender);
+    await updateUserInDB(username, email, location, gender);
+    navigation.goBack();
   }
 
   return (
