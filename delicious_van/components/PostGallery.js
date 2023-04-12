@@ -7,8 +7,8 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  Modal,
 } from "react-native";
+import Modal from "react-native-modal";
 import PostCard from "./PostCard"; // Import the PostCard component
 import { firestore } from "../firebase/firebase-setup";
 import { useNavigation } from "@react-navigation/native";
@@ -20,7 +20,7 @@ export default function PostGallery({ txt }) {
   const [oldData, setOldData] = useState([]);
   const navigation = useNavigation();
   const [text, setText] = useState("");
-  const [visible, setVisible] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(firestore, "posts"),
@@ -40,6 +40,9 @@ export default function PostGallery({ txt }) {
     return () => unsubscribe();
   }, []);
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   const renderItem = ({ item }) => (
     <PostCard post={item} navigation={navigation} />
   );
@@ -87,12 +90,7 @@ export default function PostGallery({ txt }) {
           )}
         </View>
         <View>
-          <TouchableOpacity
-            style={styles.sortContainer}
-            onPress={() => {
-              setVisible(true);
-            }}
-          >
+          <TouchableOpacity style={styles.sortContainer} onPress={toggleModal}>
             <Image
               style={styles.sortIcon}
               source={require("../assets/sort.png")}
@@ -111,59 +109,34 @@ export default function PostGallery({ txt }) {
         />
       </View>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={() => {
-          setVisible(!visible);
-        }}
-      >
-        <View style={styles.classificaitonContainer}>
-          <View style={styles.sortClassificationContainer}>
-            <TouchableOpacity
-              style={styles.classificaiton}
-              onPress={() => {
-                setData(
-                  data.sort(
-                    (a, b) =>
-                      b.likes.length +
-                      b.comments.length -
-                      a.likes.length -
-                      a.comments.length
-                  )
-                );
-                setVisible(false);
-              }}
-            >
-              <Text style={styles.text}>Sort by hotest</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.classificaiton}
-              onPress={() => {
-                setData(
-                  data.sort(
-                    (a, b) => b.time - a.time
-                  )
-                );
-                setVisible(false);
-              }}
-            >
-              <Text style={styles.text}>Sort by newest</Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
-              style={styles.classificaiton}
-              onPress={() => setVisible(false)}
-            >
-              <Text style={styles.text}>Sort by nearest</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.classificaiton, { borderBottomWidth: 0 }]}
-              onPress={() => setVisible(false)}
-            >
-              <Text style={styles.text}>Sort by rating</Text>
-            </TouchableOpacity> */}
-          </View>
+      <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+        <View style={styles.sortClassificationContainer}>
+          <TouchableOpacity
+            style={styles.classificaiton}
+            onPress={() => {
+              setData(
+                data.sort(
+                  (a, b) =>
+                    b.likes.length +
+                    b.comments.length -
+                    a.likes.length -
+                    a.comments.length
+                )
+              );
+              setModalVisible(false);
+            }}
+          >
+            <Text style={styles.text}>Sort by hotest</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.classificaiton, { borderBottomWidth: 0 }]}
+            onPress={() => {
+              setData(data.sort((a, b) => b.time - a.time));
+              setModalVisible(false);
+            }}
+          >
+            <Text style={styles.text}>Sort by newest</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -226,9 +199,7 @@ const styles = StyleSheet.create({
   closeIcon: {
     height: 30,
     width: 30,
-    //left: 300,
     opacity: 0.5,
-    //ijustifyContent:'flex-end',
   },
   sortContainer: {
     marginRight: 20,
@@ -238,6 +209,7 @@ const styles = StyleSheet.create({
     height: 85,
     borderRadius: 10,
     borderWidth: 0.2,
+    marginLeft: "10%",
     borderColor: colors.border,
     backgroundColor: colors.white,
   },
