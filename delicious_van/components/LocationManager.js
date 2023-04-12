@@ -125,17 +125,16 @@ export default function LocationManager({ sendLocation, currentLocation }) {
 
 const styles = {
     menuButton: {
-        backgroundColor: colors.buttonBackground,
-        borderRadius: 5,
-        height: 40,
+        backgroundColor: colors.backgroundColor,
+        borderRadius: 30,
+        height: 30,
         justifyContent: "center",
         alignItems: "center",
-        padding: 10,
-        marginTop: 10,
+        padding: 5,
     },
     menuButtonText: {
-        color: colors.white,
-        fontSize: 16,
+        color: colors.primary,
+        fontSize: 13,
 
     },
     modalContent: {

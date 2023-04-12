@@ -112,6 +112,24 @@ export default function PostAdd({ navigation }) {
             </Text>
           )}
 
+
+          <View style={styles.restaurantSearchContainer}>
+            <RestaurantSearch
+              onBusinessSelect={(business) => {
+                // Save the selected business to the post data
+                setBusiness(business);
+              }}
+            />
+            {business && (<View style={styles.selectedBusinessContainer}>
+              <Text style={styles.selectedBusinessName}>{business.name}</Text>
+              <Text style={styles.selectedBusinessAddress}>
+                {business.location.address1}
+              </Text>
+            </View>)}
+          </View>
+          <View style={styles.location}>
+            <LocationManager sendLocation={setLocation} currentLocation={null} />
+          </View>
           <View style={styles.imagePickerContainer}>
             <ImagePickManager
               images={images}
@@ -121,17 +139,6 @@ export default function PostAdd({ navigation }) {
             />
           </View>
 
-          <View style={styles.restaurantSearchContainer}>
-            <RestaurantSearch
-              onBusinessSelect={(business) => {
-                // Save the selected business to the post data
-                setBusiness({ selectedBusiness: business });
-              }}
-            />
-          </View>
-          <View style={styles.location}>
-            <LocationManager sendLocation={setLocation} currentLocation={null} />
-          </View>
           <View style={styles.bottomContainer}>
             <PressableButton
               buttonPressed={handleSubmit}
@@ -236,5 +243,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
     marginBottom: 10,
+  },
+ 
+  selectedBusinessContainer: {
+    marginTop: 10,
+  },
+
+  selectedBusinessName: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  selectedBusinessAddress: {
+    fontSize: 14,
   },
 });

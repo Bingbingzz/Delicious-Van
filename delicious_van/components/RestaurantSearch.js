@@ -9,19 +9,27 @@ import { Searchbar, ActivityIndicator } from 'react-native-paper';
 import axios from 'axios';
 import colors from "../colors"
 import { YELP_API_KEY } from "@env";
+import { DefaultTheme } from 'react-native-paper';
 
-function SelectedBusiness({ business }) {
-    if (!business) return null;
+const customSearchbarTheme = {
+    ...DefaultTheme,
+    colors: {
+        ...DefaultTheme.colors,
+        placeholder: colors.gray,
+    },
+};
+// export function SelectedBusiness({ business }) {
+//     if (!business) return null;
 
-    return (
-        <View style={styles.selectedBusinessContainer}>
-            <Text style={styles.selectedBusinessName}>{business.name}</Text>
-            <Text style={styles.selectedBusinessAddress}>
-                {business.location.address1}
-            </Text>
-        </View>
-    );
-}
+//     return (
+//         <View style={styles.selectedBusinessContainer}>
+//             <Text style={styles.selectedBusinessName}>{business.name}</Text>
+//             <Text style={styles.selectedBusinessAddress}>
+//                 {business.location.address1}
+//             </Text>
+//         </View>
+//     );
+// }
 
 export default function RestaurantSearch({ onBusinessSelect }) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -66,11 +74,15 @@ export default function RestaurantSearch({ onBusinessSelect }) {
 
     return (
         <View style={styles.searchContainer}>
+            <Text style={styles.searchBarTitle}>Add Location</Text>
             <Searchbar
-                placeholder="Search for restaurants"
+                theme={customSearchbarTheme}
+                placeholder="Search Restaurant Location by Name"
                 onChangeText={handleSearch}
                 value={searchQuery}
                 style={styles.searchBar}
+                inputStyle={styles.searchBarInput}
+
             />
             {loading && <ActivityIndicator animating={true} style={styles.loading} />}
             <View>
@@ -80,7 +92,7 @@ export default function RestaurantSearch({ onBusinessSelect }) {
                     </TouchableOpacity>
                 ))}
             </View>
-            <SelectedBusiness business={selectedBusiness} />
+            
         </View>
     );
 };
@@ -88,10 +100,11 @@ export default function RestaurantSearch({ onBusinessSelect }) {
 const styles = StyleSheet.create({
     searchContainer: {
         marginTop: 10,
+
     },
 
     searchBar: {
-        marginBottom: 10,
+        marginBottom: 5,
         backgroundColor: (colors.white),
     },
 
@@ -105,16 +118,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
 
-    selectedBusinessContainer: {
-        marginTop: 10,
-    },
+    
+    searchBarInput: {
+        textAlign: 'left',
+        fontSize: 15,
 
-    selectedBusinessName: {
+    },
+    searchBarTitle: {
+        fontSize: 18,
         fontWeight: "bold",
-        fontSize: 16,
-    },
-
-    selectedBusinessAddress: {
-        fontSize: 14,
-    },
+        marginBottom: 20,
+    }
 });
