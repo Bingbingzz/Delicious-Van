@@ -6,10 +6,17 @@ import colors from "../../colors";
 import Avatar from "../../assets/avatar.png";
 import { IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import * as ImagePicker from "expo-image-picker";
+import {
+  updateUserPictureInDB,
+  uploadImage,
+} from "../../firebase/firestoreHelper";
 import NotificaitonManager from "../../components/NotificaitonManager";
 
 export default function UserProfile() {
   const navigation = useNavigation();
+  const { showActionSheetWithOptions } = useActionSheet();
 
   const LogoutHandler = async () => {
     try {
@@ -21,10 +28,70 @@ export default function UserProfile() {
     }
   };
 
+  const sendPhoto = async (photo) => {
+    const url = await uploadImage(photo.uri);
+    await updateUserPictureInDB(url);
+  };
+
+  const handleImageSelect = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access the camera roll is required!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const url = await uploadImage(result.assets[0].uri);
+      await updateUserPictureInDB(url);
+    }
+  };
+
+  const openActionSheet = () => {
+    const options = ["From Photos", "From Camera", "Cancel"];
+
+    showActionSheetWithOptions(
+      {
+        options,
+      },
+      (selectedIndex) => {
+        switch (selectedIndex) {
+          case 0:
+            handleImageSelect();
+            break;
+
+          case 1:
+            navigation.navigate("CameraManager", { sendPhoto: sendPhoto });
+            break;
+
+          case 2:
+          // Canceled
+        }
+      }
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <Image source={Avatar} style={styles.avatar} />
+        <TouchableOpacity onPress={() => openActionSheet()}>
+          <Image
+            source={
+              auth.currentUser.photoURL
+                ? { uri: auth.currentUser.photoURL }
+                : Avatar
+            }
+            style={styles.avatar}
+          />
+        </TouchableOpacity>
         <Text style={styles.email}>{auth.currentUser.email}</Text>
       </View>
       <View style={styles.center}>
@@ -34,7 +101,7 @@ export default function UserProfile() {
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log(222)}>
+        <TouchableOpacity onPress={() => navigation.navigate("Comments")}>
           <View style={styles.item}>
             <Text style={styles.itemText}>Comments</Text>
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
@@ -83,31 +150,32 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginRight: 5,
+    borderRadius: 100,
   },
   email: {
     color: colors.primary,
     marginTop: 10,
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   center: {
-    width: '100%',
-    padding: 40
+    width: "100%",
+    padding: 40,
   },
   item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
     paddingHorizontal: 20,
     paddingVertical: 6,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#c8d6d7',
+    borderColor: "#c8d6d7",
     marginBottom: 10,
   },
   itemText: {
-    fontWeight: 'bold'
-  }
+    fontWeight: "bold",
+  },
 });

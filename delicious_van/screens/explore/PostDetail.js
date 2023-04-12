@@ -114,6 +114,7 @@ export default function PostDetail({ route }) {
     const newComment = {
       userEmail: auth.currentUser.email,
       userId: auth.currentUser.uid,
+      userPicture: auth.currentUser.photoURL,
       content: comment,
       date: Date.now(),
     };
