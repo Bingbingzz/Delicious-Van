@@ -5,6 +5,7 @@ import PressableButton from "../../components/PressableButton";
 import { updatePostInDB } from "../../firebase/firestoreHelper";
 import ImagePickManager from "../../components/ImagePickManager";
 import LocationManager from "../../components/LocationManager";
+import RestaurantSearch from '../../components/RestaurantSearch';
 
 export default function PostEdit({ route, navigation }) {
   const { post } = route.params;
@@ -25,7 +26,7 @@ export default function PostEdit({ route, navigation }) {
       imageUrls: images, userId, userEmail,
       location: newLocation,
       time: Date.now(),
-      
+
     };
     updatePostInDB(id, updatedPost);
     navigation.goBack();
@@ -49,14 +50,23 @@ export default function PostEdit({ route, navigation }) {
           placeholder="Write your post content"
         />
       </View>
-      <View style={{ alignSelf: "left" }}>
-        <LocationManager sendLocation={setNewLocation} currentLocation={location} />
-      </View>
+
       <ImagePickManager
         images={images}
         setImages={setImages}
         handleImageDelete={handleImageDelete}
       />
+      <View>
+        <View style={{ alignSelf: "left" }}>
+          <LocationManager sendLocation={setNewLocation} currentLocation={location} />
+        </View>
+        <RestaurantSearch
+          onBusinessSelect={(business) => {
+            // Save the selected business to the post data
+            setPostData({ ...postData, selectedBusiness: business });
+          }}
+        />
+      </View>
       <View style={styles.bottomContainer}>
         <PressableButton
           buttonPressed={handleSave}

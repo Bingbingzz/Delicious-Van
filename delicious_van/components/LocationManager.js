@@ -81,7 +81,7 @@ export default function LocationManager({ sendLocation, currentLocation }) {
     return (
         <View>
             <TouchableOpacity onPress={toggleModal} style={styles.menuButton}>
-                <Text style={styles.menuButtonText}>Select Location</Text>
+                <Text style={styles.menuButtonText}>Not in the list? Select Location</Text>
             </TouchableOpacity>
             <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
                 <View style={styles.modalContent}>
@@ -131,11 +131,12 @@ const styles = {
         justifyContent: "center",
         alignItems: "center",
         padding: 10,
-        margin: 10,
+        marginTop: 10,
     },
     menuButtonText: {
         color: colors.white,
         fontSize: 16,
+
     },
     modalContent: {
         backgroundColor: "white",
@@ -153,7 +154,8 @@ const styles = {
         padding: 10,
     },
     mapPreview: {
-        width: 200,
+        marginTop: 10,
+        width: 250,
         height: 150,
     }
 }

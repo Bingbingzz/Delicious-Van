@@ -26,6 +26,7 @@ import colors from "../../colors";
 import Avatar from "../../assets/avatar.png";
 import { KeyboardShift } from "../../components/KeyboardShift";
 import { MAPS_API_KEY } from "@env";
+import RestaurantSearch from '../../components/RestaurantSearch';
 
 const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
 
@@ -41,7 +42,7 @@ export default function PostDetail({ route }) {
   const { title, imageUrls, description, id, userId, userEmail, location } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const [mapImageKey, setMapImageKey] = useState(0);
-
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
   const fetchPostData = async () => {
     const updatedPost = await getPostFromDB(id);
     if (updatedPost) {
@@ -192,6 +193,14 @@ export default function PostDetail({ route }) {
               style={{ width: "100%", height: 200 }}
             />
           )}
+          {
+            selectedBusiness && (
+              <View style={styles.businessDetails}>
+                <Text style={styles.businessName}>{selectedBusiness.name}</Text>
+                <Text style={styles.businessAddress}>{selectedBusiness.location.address1}</Text>
+              </View>
+            )
+          }
 
           <View style={styles.bottom}>
             <View style={styles.inputWrapper}>
@@ -374,5 +383,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     right: 5,
+  },
+  businessDetails: {
+    marginTop: 10,
+  },
+
+  businessName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  businessAddress: {
+    fontSize: 14,
+    color: 'gray',
   },
 });
