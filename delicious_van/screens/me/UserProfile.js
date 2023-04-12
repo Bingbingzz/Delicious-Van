@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import PressableButton from "../../components/PressableButton";
 import { auth } from "../../firebase/firebase-setup";
 import colors from "../../colors";
@@ -17,6 +17,7 @@ import NotificaitonManager from "../../components/NotificaitonManager";
 export default function UserProfile() {
   const navigation = useNavigation();
   const { showActionSheetWithOptions } = useActionSheet();
+  const [userPhoto, setUserPhoto] = useState(auth.currentUser.photoURL);
 
   const LogoutHandler = async () => {
     try {
@@ -52,6 +53,7 @@ export default function UserProfile() {
     if (!result.canceled) {
       const url = await uploadImage(result.assets[0].uri);
       await updateUserPictureInDB(url);
+      setUserPhoto(url);
     }
   };
 
@@ -84,11 +86,7 @@ export default function UserProfile() {
       <View style={styles.top}>
         <TouchableOpacity onPress={() => openActionSheet()}>
           <Image
-            source={
-              auth.currentUser.photoURL
-                ? { uri: auth.currentUser.photoURL }
-                : Avatar
-            }
+            source={userPhoto ? { uri: userPhoto } : Avatar}
             style={styles.avatar}
           />
         </TouchableOpacity>
@@ -107,13 +105,13 @@ export default function UserProfile() {
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Favorites')}>
+        <TouchableOpacity onPress={() => navigation.navigate("Favorites")}>
           <View style={styles.item}>
             <Text style={styles.itemText}>Favorites</Text>
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('MyPosts')}>
+        <TouchableOpacity onPress={() => navigation.navigate("MyPosts")}>
           <View style={styles.item}>
             <Text style={styles.itemText}>My Posts</Text>
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
