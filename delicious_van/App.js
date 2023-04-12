@@ -23,6 +23,7 @@ import { Provider } from 'react-native-paper';
 import * as Notifications from "expo-notifications";
 import colors from './colors';
 import CameraManager from "./components/CameraManager";
+import { Provider as PaperProvider } from 'react-native-paper';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -83,7 +84,7 @@ export default function App() {
     });
   }, []);
   return (
-    <Provider>
+    <PaperProvider>
       <ActionSheetProvider>
         <NavigationContainer>
           <Stack.Navigator
@@ -99,7 +100,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </ActionSheetProvider>
-    </Provider>
+    </PaperProvider>
   );
 }
 

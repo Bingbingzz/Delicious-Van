@@ -26,6 +26,7 @@ import colors from "../../colors";
 import Avatar from "../../assets/avatar.png";
 import { KeyboardShift } from "../../components/KeyboardShift";
 import { MAPS_API_KEY } from "@env";
+import RestaurantSearch from '../../components/RestaurantSearch';
 
 const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
 
@@ -38,7 +39,7 @@ export default function PostDetail({ route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
-  const { title, imageUrls, description, id, userId, userEmail, location } = postData;
+  const { title, imageUrls, description, id, userId, userEmail, location, business } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const [mapImageKey, setMapImageKey] = useState(0);
 
@@ -182,7 +183,15 @@ export default function PostDetail({ route }) {
           <Image source={{ uri: displayImage }} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
-          {/* show location map here! */}
+          <Text style={styles.title}>Location</Text>
+          {
+            business && (
+              <View style={styles.businessDetails}>
+                <Text style={styles.businessName}>{business.name}</Text>
+                <Text style={styles.businessAddress}>{business.location.address1}</Text>
+              </View>
+            )
+          }
           {location && (
             <Image
               key={mapImageKey}
@@ -192,6 +201,7 @@ export default function PostDetail({ route }) {
               style={{ width: "100%", height: 200 }}
             />
           )}
+
 
           <View style={styles.bottom}>
             <View style={styles.inputWrapper}>
@@ -374,5 +384,30 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     right: 5,
+  },
+  businessDetails: {
+    marginTop: 10,
+  },
+
+  businessName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  businessAddress: {
+    fontSize: 14,
+    color: 'gray',
+  },
+  selectedBusinessContainer: {
+    marginTop: 10,
+  },
+
+  selectedBusinessName: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  selectedBusinessAddress: {
+    fontSize: 14,
   },
 });
