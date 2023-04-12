@@ -24,6 +24,7 @@ import * as Notifications from "expo-notifications";
 import colors from './colors';
 import CameraManager from "./components/CameraManager";
 import ProfileEdit from "./screens/me/ProfileEdit";
+import MyPosts from "./screens/me/MyPosts";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -63,6 +64,7 @@ const AppStack = (
     <Stack.Screen name="PostEdit" component={PostEdit} />
     <Stack.Screen name="Comments" component={Comments} />
     <Stack.Screen name="Favorites" component={Favorites} options={{ title: 'My Favorites' }} />
+    <Stack.Screen name="MyPosts" component={MyPosts} options={{ title: 'My Posts' }} />
     <Stack.Screen name="UserProfile" component={UserProfile} />
     <Stack.Screen name="ProfileEdit" component={ProfileEdit} options={{ title: 'Profile' }} />
     <Stack.Screen name="CameraManager" component={CameraManager} />

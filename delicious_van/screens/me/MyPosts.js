@@ -7,8 +7,8 @@ import colors from "../../colors";
 
 const windowWidth = Dimensions.get("window").width;
 
-export default function Favorites() {
-  const [favorites, setFavorites] = useState([]);
+export default function MyPosts() {
+  const [posts, setPosts] = useState([]);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -16,10 +16,10 @@ export default function Favorites() {
       collection(firestore, "posts"),
       (querySnapshot) => {
         if (querySnapshot.empty) {
-          setFavorites([]);
+          setPosts([]);
         } else {
-          const fetchedFavorites = querySnapshot.docs.filter((doc) => (doc.data().likes || []).includes(auth.currentUser.uid)).map((doc) => ({ ...doc.data(), id: doc.id }));
-          setFavorites(fetchedFavorites);
+          const fetchedMyPosts = querySnapshot.docs.filter((doc) => doc.data().userId === auth.currentUser.uid).map((doc) => ({ ...doc.data(), id: doc.id }));
+          setPosts(fetchedMyPosts);
         }
       }
     );
@@ -30,19 +30,19 @@ export default function Favorites() {
   const toPostDetail = (post) => {
     navigation.navigate('PostDetail', { post })
   }
-  
+
   return (
     <View style={styles.container}>
-    {
-      favorites.map((favorite) => (
-        <TouchableOpacity key={favorite.id} onPress={() => toPostDetail(favorite)}>
-          <View style={styles.item}>
-            <Image source={{ uri: favorite.imageUrls[0] }} style={styles.image} />
-            <Text style={styles.itemText}>{favorite.title}</Text>
-          </View>
-        </TouchableOpacity>
-      ))
-    }
+      {
+        posts.map((post) => (
+          <TouchableOpacity key={post.id} onPress={() => toPostDetail(post)}>
+            <View style={styles.item}>
+              <Image source={{ uri: post.imageUrls[0] }} style={styles.image} />
+              <Text style={styles.itemText}>{post.title}</Text>
+            </View>
+          </TouchableOpacity>
+        ))
+      }
     </View>
   )
 }

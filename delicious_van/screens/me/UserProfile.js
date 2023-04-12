@@ -113,6 +113,12 @@ export default function UserProfile() {
             <IconButton icon="chevron-right" iconColor="#c1c1c1" />
           </View>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('MyPosts')}>
+          <View style={styles.item}>
+            <Text style={styles.itemText}>My Posts</Text>
+            <IconButton icon="chevron-right" iconColor="#c1c1c1" />
+          </View>
+        </TouchableOpacity>
       </View>
       <NotificaitonManager />
       <PressableButton
