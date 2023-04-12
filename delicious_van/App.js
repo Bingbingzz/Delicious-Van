@@ -23,6 +23,8 @@ import { Provider } from 'react-native-paper';
 import * as Notifications from "expo-notifications";
 import colors from './colors';
 import CameraManager from "./components/CameraManager";
+import ProfileEdit from "./screens/me/ProfileEdit";
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -37,7 +39,7 @@ const AuthStack = (
       name="Welcome"
       component={Welcome}
       options={{
-        headerShown: false,
+        headerShown: false
       }}
     />
     <Stack.Screen name="Login" component={Login} />
@@ -62,6 +64,7 @@ const AppStack = (
     <Stack.Screen name="Comments" component={Comments} />
     <Stack.Screen name="Favorites" component={Favorites} />
     <Stack.Screen name="UserProfile" component={UserProfile} />
+    <Stack.Screen name="ProfileEdit" component={ProfileEdit} options={{ title: 'Profile', headerTitleAlign: 'center' }} />
     <Stack.Screen name="CameraManager" component={CameraManager} />
   </>
 );
