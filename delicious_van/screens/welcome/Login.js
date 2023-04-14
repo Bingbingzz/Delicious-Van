@@ -1,4 +1,4 @@
-import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, Button, TextInput, StyleSheet, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from 'delicious_van/firebase/firebase-setup.js'
@@ -7,7 +7,6 @@ import colors from '../../colors';
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
   const loginHandler = async () => {
 
     signInWithEmailAndPassword(auth, email, password)
@@ -19,7 +18,10 @@ export default function Login({ navigation }) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage)
+        Alert.alert('Error', 'Incorrect username or password', [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
+        setPassword("")
       });
   };
   const signUpHandler = () => {
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 20,
     padding: 10,
-    width: 100, 
+    width: 100,
   },
   buttonText: {
     color: '#fff',
