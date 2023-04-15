@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet, Text, Alert } from "react-native";
+import { View, TextInput, StyleSheet, Text, Alert, KeyboardAvoidingView } from "react-native";
 import React, { useCallback, useState } from "react";
 import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
@@ -6,12 +6,16 @@ import { writePostToDB } from "../../firebase/firestoreHelper";
 import ImagePickManager from "../../components/ImagePickManager";
 import { auth } from "../../firebase/firebase-setup";
 import LocationManager from "../../components/LocationManager";
+import RestaurantSearch from '../../components/RestaurantSearch';
+import { ScrollView } from "react-native-gesture-handler";
+
 export default function PostAdd({ navigation }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [images, setImages] = useState([]);
   const [location, setLocation] = useState(null);
+  const [business, setBusiness] = useState(null);
   const handleImageDelete = useCallback(
     (index) => {
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
@@ -26,7 +30,7 @@ export default function PostAdd({ navigation }) {
         "Please enter a valid title and a description.",
         [{ text: "OK" }]
       );
-      
+
       return;
     }
 
@@ -39,14 +43,13 @@ export default function PostAdd({ navigation }) {
         userEmail: auth.currentUser.email,
         location: location,
         comments: [],
-        likes:[],
-        time : Date.now(),
+        likes: [],
+        time: Date.now(),
+        business: business,
       });
     } catch (error) {
       // console.log(error.message);
     }
-
-    // reset state
     setTitle("");
     setDescription("");
     setIsValid(true);
@@ -78,50 +81,75 @@ export default function PostAdd({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={title}
-          onChangeText={handleTitleChange}
-          placeholder="Write your post title"
-        />
-      </View>
-      {!isValid && !title && (
-        <Text style={styles.errorMessage}>Please enter a valid title</Text>
-      )}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.content}
-          value={description}
-          onChangeText={handleDescriptionChange}
-          placeholder="Write your post content"
-        />
-      </View>
-      {!isValid && !description && (
-        <Text style={styles.errorMessage}>
-          Please enter a valid description
-        </Text>
-      )}
-      <View style={styles.location}>
-        <LocationManager sendLocation={setLocation} currentLocation={null} />
-      </View>
-      <ImagePickManager
-        images={images}
-        setImages={setImages}
-        handleImageDelete={handleImageDelete}
-        navigation={navigation}
-      />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={title}
+              onChangeText={handleTitleChange}
+              placeholder="Write your post title"
+            />
+          </View>
+          {!isValid && !title && (
+            <Text style={styles.errorMessage}>Please enter a valid title</Text>
+          )}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.content}
+              value={description}
+              onChangeText={handleDescriptionChange}
+              placeholder="Write your post content"
+            />
+          </View>
+          {!isValid && !description && (
+            <Text style={styles.errorMessage}>
+              Please enter a valid description
+            </Text>
+          )}
 
-      <View style={styles.bottomContainer}>
-        <PressableButton
-          buttonPressed={handleSubmit}
-          customizedStyle={[styles.button]}
-        >
-          <Text style={styles.buttonText}>Post it!</Text>
-        </PressableButton>
-      </View>
-    </View>
+
+          <View style={styles.restaurantSearchContainer}>
+            <RestaurantSearch
+              onBusinessSelect={(business) => {
+                // Save the selected business to the post data
+                setBusiness(business);
+              }}
+            />
+            {business && (<View style={styles.selectedBusinessContainer}>
+              <Text style={styles.selectedBusinessName}>{business.name}</Text>
+              <Text style={styles.selectedBusinessAddress}>
+                {business.location.address1}
+              </Text>
+            </View>)}
+          </View>
+          <View style={styles.location}>
+            <LocationManager sendLocation={setLocation} currentLocation={null} />
+          </View>
+          <View style={styles.imagePickerContainer}>
+            <ImagePickManager
+              images={images}
+              setImages={setImages}
+              handleImageDelete={handleImageDelete}
+              navigation={navigation}
+            />
+          </View>
+
+          <View style={styles.bottomContainer}>
+            <PressableButton
+              buttonPressed={handleSubmit}
+              customizedStyle={[styles.button]}
+            >
+              <Text style={styles.buttonText}>Post it!</Text>
+            </PressableButton>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -196,7 +224,37 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
+  bottomContainer: {
+    width: "100%",
+    marginTop: 30,
+    marginBottom: 30,
+  },
   location: {
+    marginTop: 10,
     alignSelf: "flex-start",
+    marginBottom: 10,
+  },
+  imagePickerContainer: {
+    marginTop: 20,
+    marginBottom: 10,
+    width: '100%',
+  },
+  restaurantSearchContainer: {
+    marginTop: 10,
+    width: '100%',
+    marginBottom: 10,
+  },
+ 
+  selectedBusinessContainer: {
+    marginTop: 10,
+  },
+
+  selectedBusinessName: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  selectedBusinessAddress: {
+    fontSize: 14,
   },
 });

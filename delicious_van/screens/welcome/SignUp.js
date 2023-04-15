@@ -17,7 +17,6 @@ export default function SignUp({ navigation }) {
     if (password !== confirmPassword) { Alert.alert("The passwords don't match") }
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-
         const user = userCredential.user;
 
       })
@@ -25,7 +24,9 @@ export default function SignUp({ navigation }) {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage)
-
+        Alert.alert('Error', 'Invalid username or password', [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
       });
   };
 
