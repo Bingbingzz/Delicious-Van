@@ -28,7 +28,6 @@ import { KeyboardShift } from "../../components/KeyboardShift";
 import { MAPS_API_KEY } from "@env";
 import RestaurantSearch from "../../components/RestaurantSearch";
 
-
 const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
 
 const windowHeight = Dimensions.get("window").height;
@@ -182,10 +181,17 @@ export default function PostDetail({ route }) {
       },
     ]);
   };
-  console.log(displayImage);
-  onChange=(nativeEvent)=>{
 
-  }
+  onChange = (nativeEvent) => {
+    if (nativeEvent) {
+      const slide = Math.ceil(
+        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
+      );
+      if (slide != imgActive) {
+        setImgActive(slide);
+      }
+    }
+  };
 
   return (
     <KeyboardShift>
@@ -204,19 +210,30 @@ export default function PostDetail({ route }) {
               pagingEnabled
               horizontal
               style={styles.wrap}
+              scrollEventThrottle={16}
             >
-
-              {
-                displayImage.map((e,index)=>
+              {displayImage.map((e, index) => (
                 <Image
                   key={e}
                   resizeMode="stretch"
                   style={styles.wrap}
-                  source={{uri:e}}
+                  source={{ uri: e }}
                 />
-                )
-              }
+              ))}
             </ScrollView>
+
+            {displayImage.length > 1 && ( // add an if statement here
+              <View style={styles.wrapDot}>
+                {displayImage.map((e, index) => (
+                  <Text
+                    key={e}
+                    style={imgActive == index ? styles.dotActive : styles.dot}
+                  >
+                    ⬤
+                  </Text>
+                ))}
+              </View>
+            )}
           </View>
 
           <Text style={styles.title}>{title}</Text>
@@ -314,7 +331,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.pageContentBgColor,
     shadowColor: "#000",
-    padding: 16,
+    // padding: 16,
   },
 
   top: {
@@ -455,5 +472,19 @@ const styles = StyleSheet.create({
   wrap: {
     width: windowWidth,
     height: windowHeight * 0.5,
+  },
+  wrapDot: {
+    position: "absolute",
+    bottom: 0,
+    flexDirection: "row",
+    alignSelf: "center",
+  },
+  dotActive: {
+    margin: 3,
+    color: "black",
+  },
+  dot: {
+    margin: 3,
+    color: colors.white,
   },
 });
