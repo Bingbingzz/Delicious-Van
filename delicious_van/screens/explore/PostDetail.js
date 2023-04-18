@@ -26,7 +26,8 @@ import colors from "../../colors";
 import Avatar from "../../assets/avatar.png";
 import { KeyboardShift } from "../../components/KeyboardShift";
 import { MAPS_API_KEY } from "@env";
-import RestaurantSearch from '../../components/RestaurantSearch';
+import RestaurantSearch from "../../components/RestaurantSearch";
+
 
 const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
 
@@ -39,8 +40,18 @@ export default function PostDetail({ route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
-  const { title, imageUrls, description, id, userId, userEmail, location, business } = postData;
-  const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
+  const [imgActive, setImgActive] = useState(0);
+  const {
+    title,
+    imageUrls,
+    description,
+    id,
+    userId,
+    userEmail,
+    location,
+    business,
+  } = postData;
+  const displayImage = imageUrls || defaultImage;
   const [mapImageKey, setMapImageKey] = useState(0);
 
   const fetchPostData = async () => {
@@ -171,6 +182,10 @@ export default function PostDetail({ route }) {
       },
     ]);
   };
+  console.log(displayImage);
+  onChange=(nativeEvent)=>{
+
+  }
 
   return (
     <KeyboardShift>
@@ -180,32 +195,54 @@ export default function PostDetail({ route }) {
             <Image source={Avatar} style={styles.avatar} />
             <Text style={styles.email}>{userEmail}</Text>
           </View>
-          <Image source={{ uri: displayImage }} style={styles.image} />
+          {/* <Image source={{ uri: displayImage }} style={styles.image} /> */}
+
+          <View style={styles.wrap}>
+            <ScrollView
+              onScroll={({ nativeEvent }) => onChange(nativeEvent)}
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              horizontal
+              style={styles.wrap}
+            >
+
+              {
+                displayImage.map((e,index)=>
+                <Image
+                  key={e}
+                  resizeMode="stretch"
+                  style={styles.wrap}
+                  source={{uri:e}}
+                />
+                )
+              }
+            </ScrollView>
+          </View>
+
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
 
-          {
-            business && (
-
-              <View style={styles.businessDetails}>
-                <Text style={styles.title}>Location</Text>
-                <Text style={styles.businessName}>{business.name}</Text>
-                <Text style={styles.businessAddress}>{business.location.address1}</Text>
-              </View>
-            )
-          }
-          {location && (<>
-            <Text style={styles.title}>User Selected Location</Text>
-            <Image
-              key={mapImageKey}
-              source={{
-                uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
-              }}
-              style={{ width: "100%", height: 200 }}
-            />
-          </>
+          {business && (
+            <View style={styles.businessDetails}>
+              <Text style={styles.title}>Location</Text>
+              <Text style={styles.businessName}>{business.name}</Text>
+              <Text style={styles.businessAddress}>
+                {business.location.address1}
+              </Text>
+            </View>
           )}
-
+          {location && (
+            <>
+              <Text style={styles.title}>User Selected Location</Text>
+              <Image
+                key={mapImageKey}
+                source={{
+                  uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
+                }}
+                style={{ width: "100%", height: 200 }}
+              />
+            </>
+          )}
 
           <View style={styles.bottom}>
             <View style={styles.inputWrapper}>
@@ -226,7 +263,7 @@ export default function PostDetail({ route }) {
               <TouchableOpacity onPress={likeComment}>
                 <View style={styles.likeWrapper}>
                   {postData.likes &&
-                    postData.likes.includes(auth.currentUser.uid) ? (
+                  postData.likes.includes(auth.currentUser.uid) ? (
                     <Icon name="favorite" size={24} color="#fe2542" />
                   ) : (
                     <Icon name="favorite-border" size={24} />
@@ -396,12 +433,12 @@ const styles = StyleSheet.create({
 
   businessName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   businessAddress: {
     fontSize: 14,
-    color: 'gray',
+    color: "gray",
   },
   selectedBusinessContainer: {
     marginTop: 10,
@@ -414,5 +451,9 @@ const styles = StyleSheet.create({
 
   selectedBusinessAddress: {
     fontSize: 14,
+  },
+  wrap: {
+    width: windowWidth,
+    height: windowHeight * 0.5,
   },
 });
