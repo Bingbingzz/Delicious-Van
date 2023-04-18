@@ -62,7 +62,7 @@ const AppStack = (
     <Stack.Screen name="PostAdd" component={PostAdd} />
     <Stack.Screen name="LocationPicker" component={LocationPicker} />
     <Stack.Screen name="PostEdit" component={PostEdit} />
-    <Stack.Screen name="Comments" component={Comments} />
+    <Stack.Screen name="Comments" component={Comments} options={{headerShown: false}} />
     <Stack.Screen name="Favorites" component={Favorites} options={{ title: 'My Favorites' }} />
     <Stack.Screen name="MyPosts" component={MyPosts} options={{ title: 'My Posts' }} />
     <Stack.Screen name="UserProfile" component={UserProfile} />
