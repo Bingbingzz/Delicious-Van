@@ -177,7 +177,7 @@ export default function PostDetail({ route }) {
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <View style={styles.top}>
-            <Image source={Avatar} style={styles.avatar} />
+            <Image source={auth.currentUser.photoURL ? { uri: auth.currentUser.photoURL } :Avatar} style={styles.avatar} />
             <Text style={styles.email}>{userEmail}</Text>
           </View>
           <Image source={{ uri: displayImage }} style={styles.image} />
