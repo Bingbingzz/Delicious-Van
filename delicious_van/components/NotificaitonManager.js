@@ -19,7 +19,6 @@ export default function NotificationManager() {
   async function verifyPermission() {
     const permissionResponse = await Notifications.getPermissionsAsync();
     if (permissionResponse.granted) {
-      console.log("permitted");
       return true;
     }
     try {
@@ -31,18 +30,13 @@ export default function NotificationManager() {
   }
 
   async function handleNotificationSchedule() {
-    console.log("here");
     const hasPermission = await verifyPermission();
     if (!hasPermission) {
       Alert.alert("You need to give notification permission");
     }
-    try {
-      const trigger = new Date();
-      console.log(trigger);
-      trigger.setHours(chosenDate.getHours());
-      trigger.setMinutes(chosenDate.getMinutes());
-      trigger.setSeconds(0);
-      console.log(trigger);
+    try {  
+      const hour = chosenDate.getHours();
+      const minute =chosenDate.getMinutes();
       await Notifications.cancelAllScheduledNotificationsAsync();
       await Notifications.scheduleNotificationAsync({
         content: {
@@ -50,11 +44,11 @@ export default function NotificationManager() {
           body: "View more recommendations!",
         },
         trigger: {
-          date: trigger,
+          hour: hour,
+          minute:minute,
           repeats: true,
         },
       });
-      console.log(date);
       Alert.alert(
         "Notification scheduled at " + chosenDate.toLocaleTimeString()
       );
@@ -68,7 +62,6 @@ export default function NotificationManager() {
   function onDateChangeHandler(event, selectedDate) {
     const currentDate = selectedDate || chosenDate;
     setChosenDate(currentDate);
-    console.log(chosenDate);
   }
 
   function cancelNotificationTimeHandler() {
@@ -95,13 +88,13 @@ export default function NotificationManager() {
           </View>
           <PressableButton
             customizedStyle={styles.button}
-            onPress={handleNotificationSchedule}
+            buttonPressed={handleNotificationSchedule}
           >
             <Text>Confirm</Text>
           </PressableButton>
           <PressableButton
             customizedStyle={styles.button}
-            onPress={cancelNotificationTimeHandler}
+            buttonPressed={cancelNotificationTimeHandler}
           >
             <Text>Cancel</Text>
           </PressableButton>
