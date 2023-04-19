@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet, Text, Alert, KeyboardAvoidingView } from "react-native";
+import { View, TextInput, StyleSheet, Text, Alert, KeyboardAvoidingView, ActivityIndicator } from "react-native";
 import React, { useCallback, useState } from "react";
 import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
@@ -16,6 +16,8 @@ export default function PostAdd({ navigation }) {
   const [images, setImages] = useState([]);
   const [location, setLocation] = useState(null);
   const [business, setBusiness] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Add a new state variable for loading
+
   const handleImageDelete = useCallback(
     (index) => {
       setImages((prevImages) => prevImages.filter((_, i) => i !== index));
@@ -33,7 +35,7 @@ export default function PostAdd({ navigation }) {
 
       return;
     }
-
+    setIsLoading(true); // Set isLoading to true before sending data
     try {
       await writePostToDB({
         title: title,
@@ -55,6 +57,8 @@ export default function PostAdd({ navigation }) {
     setIsValid(true);
     setImages([]);
     setLocation(null);
+    setBusiness(null);
+    setIsLoading(false); // Set isLoading to false after the process is finished
     navigation.goBack();
   };
 
@@ -87,6 +91,11 @@ export default function PostAdd({ navigation }) {
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
+          {isLoading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          )}
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
@@ -154,6 +163,16 @@ export default function PostAdd({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+  },
   container: {
     flex: 1,
     padding: 16,
@@ -244,7 +263,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 10,
   },
- 
+
   selectedBusinessContainer: {
     marginTop: 10,
   },
