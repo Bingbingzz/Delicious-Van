@@ -84,7 +84,9 @@ export default function Comments() {
   return (
     <>
       <View style={styles.header}>
-        <Ionicons name="arrow-back" size={25} color={colors.white} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={25} color={colors.white} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => chooseType()}>
           <View style={styles.title}>
             <Text style={styles.titleText}>Comments</Text>
