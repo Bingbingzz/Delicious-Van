@@ -60,7 +60,7 @@ export default function Comments() {
   };
 
   const chooseType = () => {
-    const options = ["My Comments", "Received comments", "Cancel"];
+    const options = ["My Comments", "Received Comments", "Cancel"];
 
     showActionSheetWithOptions(
       {
@@ -89,7 +89,9 @@ export default function Comments() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => chooseType()}>
           <View style={styles.title}>
-            <Text style={styles.titleText}>Comments</Text>
+            <Text style={styles.titleText}>
+              {type ? "Received Comments" : "My Comments"}
+            </Text>
             <Ionicons name="arrow-down-sharp" size={20} color={colors.white} />
           </View>
         </TouchableOpacity>
