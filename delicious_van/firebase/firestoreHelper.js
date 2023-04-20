@@ -1,5 +1,5 @@
 import { doc, setDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import { auth, firestore, storage } from "./firebase-setup";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { updateProfile, updateEmail } from "firebase/auth";
@@ -11,9 +11,17 @@ export async function getPostFromDB(id) {
 
     if (postSnapshot.exists()) {
       const postData = postSnapshot.data();
+      const queryUsersSnapshot = await getDocs(collection(firestore, "users"));
+      let user;
+      queryUsersSnapshot.forEach((doc) => {
+        if (doc.data().uid === postData.userEmail) {
+          user = doc.data();
+        }
+      });
       return {
         id: postSnapshot.id,
         ...postData,
+        user,
       };
     } else {
       console.log("No such document!");
@@ -114,11 +122,27 @@ export async function updateUserInDB(username, email, location, gender) {
   }
 }
 
-export async function updateUserPictureInDB(url) {
+export async function updateUserPictureInDB(email, url) {
   try {
     await updateProfile(auth.currentUser, {
       photoURL: url,
     });
+    const queryUsersSnapshot = await getDocs(collection(firestore, "users"));
+    let userDoc;
+    queryUsersSnapshot.forEach((doc) => {
+      console.log(doc.data().email, email);
+      if (doc.data().email === email) {
+        userDoc = { ...doc.data(), id: doc.id };
+      }
+    });
+
+    if (userDoc) {
+      const entryRef = doc(firestore, "users", userDoc.id);
+      await updateDoc(entryRef, {
+        ...userDoc,
+        photoURL: url,
+      });
+    }
   } catch (err) {
     console.log(err);
   }
