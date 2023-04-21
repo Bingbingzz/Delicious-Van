@@ -40,12 +40,15 @@ export default function PostDetail({ route }) {
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
   const [imgActive, setImgActive] = useState(0);
+  
   const {
     title,
     imageUrls,
     description,
     id,
+    user,
     userId,
+    userName,
     userEmail,
     location,
     business,
@@ -60,6 +63,7 @@ export default function PostDetail({ route }) {
     }
   };
   React.useEffect(() => {
+    auth.currentUser.reload();
     const unsubscribe = navigation.addListener("focus", () => {
       fetchPostData();
     });
@@ -121,25 +125,32 @@ export default function PostDetail({ route }) {
   };
 
   const sendComment = () => {
-    // create new comment
-    const newComment = {
-      userEmail: auth.currentUser.email,
-      userId: auth.currentUser.uid,
-      content: comment,
-      date: Date.now(),
-    };
-    // add the new comment to post comment list
-    if (postData.comments) {
-      postData.comments.push(newComment);
+    if (auth.currentUser.displayName) {
+      // create new comment
+      const newComment = {
+        userEmail: auth.currentUser.email,
+        userId: auth.currentUser.uid,
+        userPicture: auth.currentUser.photoURL,
+        userName: (auth.currentUser.displayName && auth.currentUser.displayName.split("|")[0]),
+        content: comment,
+        date: Date.now(),
+      };
+      // add the new comment to post comment list
+      if (postData.comments) {
+        postData.comments.push(newComment);
+      } else {
+        postData.comments = [newComment];
+      }
+      // update post
+      updatePostInDB(id, postData).then(() => {
+        setPostData({ ...postData });
+        // reset comment input
+        setComment("");
+      });
     } else {
-      postData.comments = [newComment];
+      Alert.alert("You need to update your username in profile.");
+      navigation.navigate('ProfileEdit')
     }
-    // update post
-    updatePostInDB(id, postData).then(() => {
-      setPostData({ ...postData });
-      // reset comment input
-      setComment("");
-    });
   };
 
   const likeComment = () => {
@@ -172,7 +183,7 @@ export default function PostDetail({ route }) {
       {
         text: "OK",
         onPress: () => {
-          postData.comments.splice(index);
+          postData.comments.splice(index, 1);
           // update post
           updatePostInDB(id, postData).then(() => {
             setPostData({ ...postData });
@@ -198,8 +209,13 @@ export default function PostDetail({ route }) {
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <View style={styles.top}>
-            <Image source={Avatar} style={styles.avatar} />
-            <Text style={styles.email}>{userEmail}</Text>
+            <Image
+              source={
+                user && user.photoURL ? { uri: user && user.photoURL } : Avatar
+              }
+              style={styles.avatar}
+            />
+            <Text style={styles.email}>{userName || userEmail}</Text>
           </View>
           {/* <Image source={{ uri: displayImage }} style={styles.image} /> */}
 
@@ -297,7 +313,7 @@ export default function PostDetail({ route }) {
               postData.comments.map((comment, index) => (
                 <View key={index} style={styles.commentItem}>
                   <View>
-                    <Text>{comment.userEmail}</Text>
+                    <Text>{comment.userName || comment.userEmail}</Text>
                     <Text style={styles.commentDate}>
                       {new Date(comment.date).toLocaleString()}
                     </Text>
@@ -350,6 +366,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 50,
     height: 50,
+    borderRadius: 50,
     marginRight: 5,
   },
 

@@ -40,7 +40,7 @@ const BottomTab = ({ navigation }) => {
                     backgroundColor: colors.primary,
                 },
                 headerTitleAlign: 'center',
-                headerTintColor: '#333333',
+                headerTintColor: colors.white,
                 headerRight: () => (
                     <PressableButton
                         buttonPressed={() => {
