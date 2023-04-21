@@ -45,6 +45,7 @@ export default function PostDetail({ route }) {
     id,
     userId,
     userEmail,
+    userName,
     location,
     user,
   } = postData;
@@ -125,6 +126,7 @@ export default function PostDetail({ route }) {
       userEmail: auth.currentUser.email,
       userId: auth.currentUser.uid,
       userPicture: auth.currentUser.photoURL,
+      userName,
       content: comment,
       date: Date.now(),
     };
@@ -193,7 +195,7 @@ export default function PostDetail({ route }) {
               }
               style={styles.avatar}
             />
-            <Text style={styles.email}>{userEmail}</Text>
+            <Text style={styles.email}>{userName || userEmail}</Text>
           </View>
           <Image source={{ uri: displayImage }} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
@@ -245,7 +247,7 @@ export default function PostDetail({ route }) {
               postData.comments.map((comment, index) => (
                 <View key={index} style={styles.commentItem}>
                   <View>
-                    <Text>{comment.userEmail}</Text>
+                    <Text>{comment.userName || comment.userEmail}</Text>
                     <Text style={styles.commentDate}>
                       {new Date(comment.date).toLocaleString()}
                     </Text>

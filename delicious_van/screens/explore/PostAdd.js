@@ -26,7 +26,10 @@ export default function PostAdd({ navigation }) {
         "Please enter a valid title and a description.",
         [{ text: "OK" }]
       );
-      
+      return;
+    }
+    if (!auth.currentUser.displayName) {
+      Alert.alert("You need to update your username in profile.");
       return;
     }
 
@@ -37,6 +40,7 @@ export default function PostAdd({ navigation }) {
         images: images,
         userId: auth.currentUser.uid,
         userEmail: auth.currentUser.email,
+        userName: (auth.currentUser.displayName && auth.currentUser.displayName.split("|")[0]),
         location: location,
         comments: [],
         likes:[],

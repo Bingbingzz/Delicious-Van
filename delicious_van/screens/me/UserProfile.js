@@ -90,7 +90,11 @@ export default function UserProfile() {
             style={styles.avatar}
           />
         </TouchableOpacity>
-        <Text style={styles.email}>{auth.currentUser.email}</Text>
+        <Text style={styles.email}>
+          {(auth.currentUser.displayName &&
+            auth.currentUser.displayName.split("|")[0]) ||
+            auth.currentUser.email}
+        </Text>
       </View>
       <View style={styles.center}>
         <TouchableOpacity onPress={() => navigation.navigate("ProfileEdit")}>

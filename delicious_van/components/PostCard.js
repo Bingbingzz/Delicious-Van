@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import {View, Text, Image, StyleSheet, Pressable, Alert} from 'react-native';
+import {auth} from "../firebase/firebase-setup";
 
 const defaultImage = 'https://i.ibb.co/JtS24qP/default-image.jpg';
 
@@ -7,9 +8,17 @@ export default function PostCard({ post, navigation }) {
     const { title, imageUrls } = post;
     const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
 
+    const toPostDetail = () => {
+        if (auth.currentUser.displayName) {
+            navigation.navigate('PostDetail', { post });
+        } else {
+            Alert.alert("You need to update your username in profile.");
+        }
+    }
+
     return (
         <View style={styles.card}>
-            <Pressable onPress={() => navigation.navigate('PostDetail', { post })}>
+            <Pressable onPress={toPostDetail}>
                 <Image source={{ uri: displayImage }} style={styles.image} />
                 <Text style={styles.title}>{title}</Text>
 
