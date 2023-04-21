@@ -30,6 +30,7 @@ export default function PostAdd({ navigation }) {
     }
     if (!auth.currentUser.displayName) {
       Alert.alert("You need to update your username in profile.");
+      navigation.navigate('ProfileEdit');
       return;
     }
 

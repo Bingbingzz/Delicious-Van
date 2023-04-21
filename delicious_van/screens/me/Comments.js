@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { auth, firestore } from "../../firebase/firebase-setup";
 import Avatar from "../../assets/avatar.png";
 import colors from "../../colors";
@@ -32,16 +32,30 @@ export default function Comments() {
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(firestore, "posts"),
-      (querySnapshot) => {
+      async (querySnapshot) => {
         if (querySnapshot.empty) {
           setComments([]);
         } else {
-          const fetchedComments = querySnapshot.docs.flatMap((doc) => {
-            return (doc.data().comments || []).map((item) => ({
-              ...item,
-              post: doc.data(),
-            }));
-          });
+          const fetchedComments = [];
+          for (let i = 0; i < querySnapshot.docs.length; i++) {
+            const postData = querySnapshot.docs[i].data();
+            for (let j = 0; j < (postData.comments || []).length; j++) {
+              const queryUsersSnapshot = await getDocs(
+                collection(firestore, "users")
+              );
+              let user;
+              queryUsersSnapshot.forEach((doc) => {
+                if (doc.data().uid === postData.comments[j].userId) {
+                  user = doc.data();
+                }
+              });
+              fetchedComments.push({
+                ...postData.comments[j],
+                post: postData,
+                userPicture: user && user.photoURL,
+              });
+            }
+          }
           const filterComments = fetchedComments.filter((comment) => {
             return type
               ? comment.post.userId === auth.currentUser.uid

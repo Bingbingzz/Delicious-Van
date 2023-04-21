@@ -179,7 +179,7 @@ export default function PostDetail({ route }) {
       {
         text: "OK",
         onPress: () => {
-          postData.comments.splice(index);
+          postData.comments.splice(index, 1);
           // update post
           updatePostInDB(id, postData).then(() => {
             setPostData({ ...postData });
