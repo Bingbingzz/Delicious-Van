@@ -111,7 +111,7 @@ export default function Comments() {
                 style={styles.avatar}
               />
               <View>
-                <Text>{comment.userEmail}</Text>
+                <Text>{comment.userName || comment.userEmail}</Text>
                 <View style={styles.contentWrapper}>
                   <Text style={styles.content}>{comment.content}</Text>
                   <Text style={styles.date}>{formatDate(comment.date)}</Text>

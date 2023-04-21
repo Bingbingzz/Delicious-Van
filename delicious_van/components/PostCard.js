@@ -9,11 +9,7 @@ export default function PostCard({ post, navigation }) {
     const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
 
     const toPostDetail = () => {
-        if (auth.currentUser.displayName) {
-            navigation.navigate('PostDetail', { post });
-        } else {
-            Alert.alert("You need to update your username in profile.");
-        }
+        navigation.navigate('PostDetail', { post });
     }
 
     return (

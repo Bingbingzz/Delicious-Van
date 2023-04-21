@@ -44,8 +44,8 @@ export default function PostDetail({ route }) {
     description,
     id,
     userId,
-    userEmail,
     userName,
+    userEmail,
     location,
     user,
   } = postData;
@@ -121,27 +121,32 @@ export default function PostDetail({ route }) {
   };
 
   const sendComment = () => {
-    // create new comment
-    const newComment = {
-      userEmail: auth.currentUser.email,
-      userId: auth.currentUser.uid,
-      userPicture: auth.currentUser.photoURL,
-      userName,
-      content: comment,
-      date: Date.now(),
-    };
-    // add the new comment to post comment list
-    if (postData.comments) {
-      postData.comments.push(newComment);
+    if (auth.currentUser.displayName) {
+      // create new comment
+      const newComment = {
+        userEmail: auth.currentUser.email,
+        userId: auth.currentUser.uid,
+        userPicture: auth.currentUser.photoURL,
+        userName: (auth.currentUser.displayName && auth.currentUser.displayName.split("|")[0]),
+        content: comment,
+        date: Date.now(),
+      };
+      // add the new comment to post comment list
+      if (postData.comments) {
+        postData.comments.push(newComment);
+      } else {
+        postData.comments = [newComment];
+      }
+      // update post
+      updatePostInDB(id, postData).then(() => {
+        setPostData({ ...postData });
+        // reset comment input
+        setComment("");
+      });
     } else {
-      postData.comments = [newComment];
+      Alert.alert("You need to update your username in profile.");
+      navigation.navigate('ProfileEdit')
     }
-    // update post
-    updatePostInDB(id, postData).then(() => {
-      setPostData({ ...postData });
-      // reset comment input
-      setComment("");
-    });
   };
 
   const likeComment = () => {

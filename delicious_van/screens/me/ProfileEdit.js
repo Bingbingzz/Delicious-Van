@@ -58,6 +58,7 @@ export default function ProfileEdit() {
         <Text>Email</Text>
         <TextInput
           style={styles.input}
+          editable={false}
           value={email}
           onChangeText={handleEmailChange}
         />
