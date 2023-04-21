@@ -25,6 +25,7 @@ import colors from './colors';
 import CameraManager from "./components/CameraManager";
 import ProfileEdit from "./screens/me/ProfileEdit";
 import MyPosts from "./screens/me/MyPosts";
+import { Provider as PaperProvider } from 'react-native-paper';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -88,7 +89,7 @@ export default function App() {
     });
   }, []);
   return (
-    <Provider>
+    <PaperProvider>
       <ActionSheetProvider>
         <NavigationContainer>
           <Stack.Navigator
@@ -104,7 +105,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </ActionSheetProvider>
-    </Provider>
+    </PaperProvider>
   );
 }
 

@@ -26,6 +26,7 @@ import colors from "../../colors";
 import Avatar from "../../assets/avatar.png";
 import { KeyboardShift } from "../../components/KeyboardShift";
 import { MAPS_API_KEY } from "@env";
+import RestaurantSearch from "../../components/RestaurantSearch";
 
 const defaultImage = "https://i.ibb.co/JtS24qP/default-image.jpg";
 
@@ -38,18 +39,21 @@ export default function PostDetail({ route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
+  const [imgActive, setImgActive] = useState(0);
+  
   const {
     title,
     imageUrls,
     description,
     id,
+    user,
     userId,
     userName,
     userEmail,
     location,
-    user,
+    business,
   } = postData;
-  const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
+  const displayImage = imageUrls || defaultImage;
   const [mapImageKey, setMapImageKey] = useState(0);
 
   const fetchPostData = async () => {
@@ -189,6 +193,17 @@ export default function PostDetail({ route }) {
     ]);
   };
 
+  onChange = (nativeEvent) => {
+    if (nativeEvent) {
+      const slide = Math.ceil(
+        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
+      );
+      if (slide != imgActive) {
+        setImgActive(slide);
+      }
+    }
+  };
+
   return (
     <KeyboardShift>
       <ScrollView style={styles.scrollView}>
@@ -202,18 +217,64 @@ export default function PostDetail({ route }) {
             />
             <Text style={styles.email}>{userName || userEmail}</Text>
           </View>
-          <Image source={{ uri: displayImage }} style={styles.image} />
+          {/* <Image source={{ uri: displayImage }} style={styles.image} /> */}
+
+          <View style={styles.wrap}>
+            <ScrollView
+              onScroll={({ nativeEvent }) => onChange(nativeEvent)}
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              horizontal
+              style={styles.wrap}
+              scrollEventThrottle={16}
+            >
+              {displayImage.map((e, index) => (
+                <Image
+                  key={e}
+                  resizeMode="stretch"
+                  style={styles.wrap}
+                  source={{ uri: e }}
+                />
+              ))}
+            </ScrollView>
+
+            {displayImage.length > 1 && ( // add an if statement here
+              <View style={styles.wrapDot}>
+                {displayImage.map((e, index) => (
+                  <Text
+                    key={e}
+                    style={imgActive == index ? styles.dotActive : styles.dot}
+                  >
+                    ⬤
+                  </Text>
+                ))}
+              </View>
+            )}
+          </View>
+
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
-          {/* show location map here! */}
+
+          {business && (
+            <View style={styles.businessDetails}>
+              <Text style={styles.title}>Location</Text>
+              <Text style={styles.businessName}>{business.name}</Text>
+              <Text style={styles.businessAddress}>
+                {business.location.address1}
+              </Text>
+            </View>
+          )}
           {location && (
-            <Image
-              key={mapImageKey}
-              source={{
-                uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
-              }}
-              style={{ width: "100%", height: 200 }}
-            />
+            <>
+              <Text style={styles.title}>User Selected Location</Text>
+              <Image
+                key={mapImageKey}
+                source={{
+                  uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${MAPS_API_KEY}`,
+                }}
+                style={{ width: "100%", height: 200 }}
+              />
+            </>
           )}
 
           <View style={styles.bottom}>
@@ -286,7 +347,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.pageContentBgColor,
     shadowColor: "#000",
-    padding: 16,
+    // padding: 16,
   },
 
   top: {
@@ -398,5 +459,49 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     right: 5,
+  },
+  businessDetails: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+
+  businessName: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  businessAddress: {
+    fontSize: 14,
+    color: "gray",
+  },
+  selectedBusinessContainer: {
+    marginTop: 10,
+  },
+
+  selectedBusinessName: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  selectedBusinessAddress: {
+    fontSize: 14,
+  },
+  wrap: {
+    width: windowWidth,
+    height: windowHeight * 0.5,
+  },
+  wrapDot: {
+    position: "absolute",
+    bottom: 0,
+    flexDirection: "row",
+    alignSelf: "center",
+  },
+  dotActive: {
+    margin: 3,
+    color: "black",
+  },
+  dot: {
+    margin: 3,
+    color: colors.white,
   },
 });
