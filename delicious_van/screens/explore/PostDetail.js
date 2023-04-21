@@ -38,7 +38,16 @@ export default function PostDetail({ route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
-  const { title, imageUrls, description, id, userId, userEmail, location } = postData;
+  const {
+    title,
+    imageUrls,
+    description,
+    id,
+    userId,
+    userEmail,
+    location,
+    user,
+  } = postData;
   const displayImage = (imageUrls && imageUrls[0]) || defaultImage;
   const [mapImageKey, setMapImageKey] = useState(0);
 
@@ -49,6 +58,7 @@ export default function PostDetail({ route }) {
     }
   };
   React.useEffect(() => {
+    auth.currentUser.reload();
     const unsubscribe = navigation.addListener("focus", () => {
       fetchPostData();
     });
@@ -177,7 +187,12 @@ export default function PostDetail({ route }) {
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <View style={styles.top}>
-            <Image source={auth.currentUser.photoURL ? { uri: auth.currentUser.photoURL } :Avatar} style={styles.avatar} />
+            <Image
+              source={
+                user && user.photoURL ? { uri: user && user.photoURL } : Avatar
+              }
+              style={styles.avatar}
+            />
             <Text style={styles.email}>{userEmail}</Text>
           </View>
           <Image source={{ uri: displayImage }} style={styles.image} />
@@ -213,7 +228,7 @@ export default function PostDetail({ route }) {
               <TouchableOpacity onPress={likeComment}>
                 <View style={styles.likeWrapper}>
                   {postData.likes &&
-                    postData.likes.includes(auth.currentUser.uid) ? (
+                  postData.likes.includes(auth.currentUser.uid) ? (
                     <Icon name="favorite" size={24} color="#fe2542" />
                   ) : (
                     <Icon name="favorite-border" size={24} />

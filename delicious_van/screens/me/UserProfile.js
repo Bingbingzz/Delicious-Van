@@ -52,7 +52,7 @@ export default function UserProfile() {
 
     if (!result.canceled) {
       const url = await uploadImage(result.assets[0].uri);
-      await updateUserPictureInDB(url);
+      await updateUserPictureInDB(auth.currentUser.email, url);
       setUserPhoto(url);
     }
   };
