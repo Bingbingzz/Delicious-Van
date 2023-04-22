@@ -45,7 +45,7 @@ export default function Comments() {
               );
               let user;
               queryUsersSnapshot.forEach((doc) => {
-                if (doc.data().uid === postData.comments[j].userId) {
+                if (doc.data().uid === postData.comments[j].userEmail) {
                   user = doc.data();
                 }
               });
