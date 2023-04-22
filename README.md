@@ -58,4 +58,29 @@ https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6
 - Notification
   -  <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231047455-055ebeee-54c4-4455-aea7-716532de0109.png">
   -  <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231047571-b381c8c2-9538-4dff-a2fd-92a632603863.png">
+
 ## Iteration3
+### Main function implemented & Contribution
+- External API(Yelp) added @AnnabelleAB
+  - enable user to search restaurant name to display the address of the restaurant that is related to their post
+
+- Login error alert set up @AnnabelleAB
+  - set Alert when user tried login but not registered before or wrong password
+
+- Notification schedule added @Bingbingzz
+  - allow user to schedule when they want to receive the notifications as their own wishes
+  
+- Multi-Photos dispayed in PostDetail modified @Bingbingzz
+  - previously only the first photo will be displayed even though the user posted multiple photos and now it is updated to enable user to swipe to review multiple photo in the post
+
+- Profile/Me screen updated(added 4 selections and enable user to upload customized avatar) @alynxu
+  - Profile: enable user to review/edit/update their profile information
+  - Comments: enable user to review the comments they created & the comments they received from others(filter integrated at the header)
+  - My Posts: enable user to review the collection of the user's own posts
+  - Favorites: enable user to review the collection of the posts that the user liked
+
+- Update-username Alert set up @alynxu
+  - alert has been set up for user to update their username before they can add post/comment, the user without username will be directly navigated to ProfileEdit 
+ 
+- User info display modified @alynxu
+  - UserEmail displayed in the PostDetail was modified to display UserName
