@@ -61,7 +61,7 @@ const BottomTab = ({ navigation }) => {
 
             <Tab.Screen name="UserProfile"
                 component={UserProfile}
-                options={{ title: 'Profile' }} />
+                options={{ title: 'Me' }} />
         </Tab.Navigator>
     );
 };
