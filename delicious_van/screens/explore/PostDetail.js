@@ -340,6 +340,7 @@ export default function PostDetail({ route }) {
 const styles = StyleSheet.create({
   scrollView: {
     // minHeight: windowHeight,
+    margin: 15,
     backgroundColor: colors.pageContentBgColor,
   },
 
