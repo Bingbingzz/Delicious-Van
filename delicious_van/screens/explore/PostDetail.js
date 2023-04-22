@@ -215,7 +215,7 @@ export default function PostDetail({ route }) {
               }
               style={styles.avatar}
             />
-            <Text style={styles.email}>{userName || userEmail}</Text>
+            <Text style={styles.email}>{(user && user.displayName && user.displayName.split("|")[0]) || userEmail}</Text>
           </View>
           {/* <Image source={{ uri: displayImage }} style={styles.image} /> */}
 

@@ -117,6 +117,21 @@ export async function updateUserInDB(username, email, location, gender) {
     await updateProfile(auth.currentUser, {
       displayName: `${username}|${location}|${gender}|${email}`,
     });
+    const queryUsersSnapshot = await getDocs(collection(firestore, "users"));
+    let userDoc;
+    queryUsersSnapshot.forEach((doc) => {
+      if (doc.data().email === email) {
+        userDoc = { ...doc.data(), id: doc.id };
+      }
+    });
+
+    if (userDoc) {
+      const entryRef = doc(firestore, "users", userDoc.id);
+      await updateDoc(entryRef, {
+        ...userDoc,
+        displayName: `${username}|${location}|${gender}|${email}`,
+      });
+    }
   } catch (err) {
     console.log(err);
   }
