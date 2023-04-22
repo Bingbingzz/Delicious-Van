@@ -61,6 +61,8 @@ https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6
   -  <img width="252" alt="image" src="https://user-images.githubusercontent.com/49429865/231047571-b381c8c2-9538-4dff-a2fd-92a632603863.png">
 
 ## Iteration3
+In ieration 3, we updated **authentication** by adding login error alert, integrated **External API use** with **Location use** in PostAdd part, updated **notification** by enabling user to schedule when they want to receive notifications. As for the **camera-use**, we remained the same functionality as ieration2. The detail of add-ons and modifications are listed as below:
+
 ### Main function implemented & Contribution
 - External API(Yelp) added @AnnabelleAB
   - enable user to search restaurant name to display the address of the restaurant that is related to their post
@@ -109,4 +111,7 @@ https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6
   - UserEmail displayed in the ProfileScreen was modified to display UserName
   - UserEmail displayed in the PostDetail was modified to display UserName
   - UserEmail displayed in the Comment was modified to display UserName
+
+
+
   
