@@ -49,11 +49,7 @@ export default function Comments() {
                   user = doc.data();
                 }
               });
-              fetchedComments.push({
-                ...postData.comments[j],
-                post: postData,
-                userPicture: user && user.photoURL,
-              });
+              fetchedComments.push({...postData.comments[j], post: postData, userPicture: user && user.photoURL, userName: (user && user.displayName && user.displayName.split("|")[0])});
             }
           }
           const filterComments = fetchedComments.filter((comment) => {
