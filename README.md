@@ -73,6 +73,10 @@ In ieration 3, we updated **authentication** by adding login error alert, integr
   - set Alert when user tried login but not registered before or wrong password
   - <img width="252" alt="error" src="https://user-images.githubusercontent.com/113411833/233752800-009eeec0-8762-4071-b073-35c79d45530e.PNG">
 
+- KeyboardShift component updated to work on Android platform @AnnabelleAB
+  - fixed keyboard shift error while creating comment under the post in Android platform
+- Minimum number of uploading photos alert set up @AnnabelleAB
+  - set up alert for the user to ensure there is at least one photo in each post
 
 - Notification schedule added @Bingbingzz
   - allow user to schedule when they want to receive the notifications as their own wishes
