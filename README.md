@@ -16,6 +16,7 @@ Authors: Anabelle Sun @AnnabelleAB, Alyn Xu @alynxu, Ce Zhao @Bingbingzz
   If you're a foodie who loves to explore new places and share your experiences with others, this app is for you! Download it today and start discovering the best dining spots in town.
 
 ### Target user
+
 - People(Age12+) who live in or are visiting Vancouver and are looking for recommendations on local restaurants and food establishments.
 
 
@@ -63,24 +64,49 @@ https://user-images.githubusercontent.com/113411833/229270403-a68ac81d-d995-40e6
 ### Main function implemented & Contribution
 - External API(Yelp) added @AnnabelleAB
   - enable user to search restaurant name to display the address of the restaurant that is related to their post
+  - <img width="252" alt="yelp" src="https://user-images.githubusercontent.com/113411833/233753003-cd716f52-0968-467e-9808-cafef5bbb98e.PNG"><img width="252" alt="yelp" src="https://user-images.githubusercontent.com/113411833/233753007-ea042ac8-687b-4e68-8bda-e8c1789cc132.PNG"><img width="252" alt="yelp" src="https://user-images.githubusercontent.com/113411833/233753014-8ef93789-d16c-469d-b3b0-8da0fd2c843e.PNG">
+
 
 - Login error alert set up @AnnabelleAB
   - set Alert when user tried login but not registered before or wrong password
+  - <img width="252" alt="error" src="https://user-images.githubusercontent.com/113411833/233752800-009eeec0-8762-4071-b073-35c79d45530e.PNG">
+
 
 - Notification schedule added @Bingbingzz
   - allow user to schedule when they want to receive the notifications as their own wishes
+  - <img width="252" alt="notification" src="https://user-images.githubusercontent.com/113411833/233753136-5764b49a-7f0c-4a23-ac80-b5444ec07926.PNG"><img width="252" alt="notification" src="https://user-images.githubusercontent.com/113411833/233753147-588fd90a-5608-45f5-8d1b-70fd70325131.PNG"><img width="252" alt="notification" src="https://user-images.githubusercontent.com/113411833/233753151-6f460555-7495-4869-ac1c-b53e9e97240c.PNG">
   
-- Multi-Photos dispayed in PostDetail modified @Bingbingzz
-  - previously only the first photo will be displayed even though the user posted multiple photos and now it is updated to enable user to swipe to review multiple photo in the post
 
-- Profile/Me screen updated(added 4 selections and enable user to upload customized avatar) @alynxu
-  - Profile: enable user to review/edit/update their profile information
-  - Comments: enable user to review the comments they created & the comments they received from others(filter integrated at the header)
+- Multi-Photos dispayed in PostDetail modified @Bingbingzz
+  - previously only the first photo will be displayed even though the user posted multiple photos and now it is updated to enable user to swipe to review multiple photo in the post. Black dot indicates which photo you are currently reviewing and white dots indicate the rest of photos.
+  - <img width="252" alt="multiphoto" src="https://user-images.githubusercontent.com/113411833/233753375-9f7af8ec-386f-4278-9616-d5fd21b43083.PNG"><img width="252" alt="multiphoto" src="https://user-images.githubusercontent.com/113411833/233753432-e82a32f6-c440-4892-a601-fc59541a1417.PNG"><img width="252" alt="multiphoto" src="https://user-images.githubusercontent.com/113411833/233753434-23535fdf-188d-47e9-8a66-e023e0a1f8f4.PNG">
+
+
+- Profile/Me screen updated(added 4 selections and enable user to upload customized avatar by tapping avatar) @alynxu
+  - <img width="252" alt="mescreen" src="https://user-images.githubusercontent.com/113411833/233753589-cf3cf5ea-64c2-4bd1-8b03-769f8e3ca5da.PNG"><img width="252" alt="mescreen" src="https://user-images.githubusercontent.com/113411833/233753556-7beb5f7d-13d9-4ebf-9532-eb1f81111420.PNG"><img width="252" alt="mescreen" src="https://user-images.githubusercontent.com/113411833/233753579-63e2bccc-8930-4c54-8ce9-598fe87f1d53.PNG">
+  
+  - Profile: enable user to review/edit/update their profile information, userEmail will be replaced to username after the update
+  - <img width="252" alt="profile" src="https://user-images.githubusercontent.com/113411833/233754107-49817e25-35f7-470d-9604-4b12b18bf59d.PNG"><img width="252" alt="profile" src="https://user-images.githubusercontent.com/113411833/233754161-1aff85a0-1aaf-4141-ae24-e08336fcd296.PNG">
+
+  
+  - Comments: enable user to review the comments they created & the comments they received from others(filter integrated at the header, user can tap the header to select to display my own comments or the comments received from others)Tapping each comment will navigate the user to the PostDetail related to that comment.
+  - <img width="252" alt="mycomments" src="https://user-images.githubusercontent.com/113411833/233754253-031b6936-374d-46b3-b1db-547b84ffe07d.png"><img width="252" alt="receivedcomments" src="https://user-images.githubusercontent.com/113411833/233754246-fb5fc5f2-2a4a-450d-9736-ce1095e959da.png">
+
   - My Posts: enable user to review the collection of the user's own posts
+  - <img width="252" alt="mypost" src="https://user-images.githubusercontent.com/113411833/233753945-22af568a-d7e6-486a-86a7-31ac2f8aba86.PNG">
+
   - Favorites: enable user to review the collection of the posts that the user liked
+  - <img width="252" alt="myfavorites" src="https://user-images.githubusercontent.com/113411833/233753942-f2a20f12-1687-4c73-bf14-6210716d9351.PNG">
+
 
 - Update-username Alert set up @alynxu
   - alert has been set up for user to update their username before they can add post/comment, the user without username will be directly navigated to ProfileEdit 
+  - <img width="252" alt="usernamealert" src="https://user-images.githubusercontent.com/113411833/233754490-1a8f0d1e-8632-4a59-898a-469f033fdfb1.PNG"><img width="252" alt="usernamealert" src="https://user-images.githubusercontent.com/113411833/233754491-07d3d0a8-531b-4732-860d-a0248e9b7883.PNG">
+
+
  
-- User info display modified @alynxu
+- User info display modified after the user updates username(shown in previous pictures) @alynxu
+  - UserEmail displayed in the ProfileScreen was modified to display UserName
   - UserEmail displayed in the PostDetail was modified to display UserName
+  - UserEmail displayed in the Comment was modified to display UserName
+  
