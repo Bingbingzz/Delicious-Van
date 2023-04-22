@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, TextInput, StyleSheet, Text, ScrollView, KeyboardAvoidingView } from "react-native";
+import { View, TextInput, StyleSheet, Text, ScrollView, KeyboardAvoidingView, Alert } from "react-native";
 import colors from "../../colors";
 import PressableButton from "../../components/PressableButton";
 import { updatePostInDB } from "../../firebase/firestoreHelper";
@@ -21,6 +21,22 @@ export default function PostEdit({ route, navigation }) {
   }, [images]);
 
   const handleSave = () => {
+    if (!title || !description) {
+      Alert.alert(
+        "Invalid Input",
+        "Please enter a valid title and a description.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+    if (images.length === 0) {
+      Alert.alert(
+        "No Images",
+        "Please upload at least one photo.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
     const updatedPost = {
       title: newTitle,
       description: newDescription,

@@ -39,6 +39,14 @@ export default function PostAdd({ navigation }) {
       navigation.navigate('ProfileEdit');
       return;
     }
+    if (images.length === 0) {
+      Alert.alert(
+        "No Images",
+        "Please upload at least one photo.",
+        [{ text: "OK" }]
+      );
+      return;
+    }
     setIsLoading(true); // Set isLoading to true before sending data
     try {
       await writePostToDB({

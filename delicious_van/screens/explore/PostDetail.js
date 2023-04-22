@@ -40,7 +40,7 @@ export default function PostDetail({ route }) {
   const [comment, setComment] = useState("");
   const [postData, setPostData] = useState(post);
   const [imgActive, setImgActive] = useState(0);
-  
+
   const {
     title,
     imageUrls,
@@ -205,7 +205,9 @@ export default function PostDetail({ route }) {
   };
 
   return (
-    <KeyboardShift>
+    <KeyboardShift
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <View style={styles.top}>
@@ -296,7 +298,7 @@ export default function PostDetail({ route }) {
               <TouchableOpacity onPress={likeComment}>
                 <View style={styles.likeWrapper}>
                   {postData.likes &&
-                  postData.likes.includes(auth.currentUser.uid) ? (
+                    postData.likes.includes(auth.currentUser.uid) ? (
                     <Icon name="favorite" size={24} color="#fe2542" />
                   ) : (
                     <Icon name="favorite-border" size={24} />
