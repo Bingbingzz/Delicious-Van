@@ -18,6 +18,16 @@ export default function UserProfile() {
   const navigation = useNavigation();
   const { showActionSheetWithOptions } = useActionSheet();
   const [userPhoto, setUserPhoto] = useState(auth.currentUser.photoURL);
+  const [userInfo, setUserInfo] = useState(auth.currentUser);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      auth.currentUser.reload().then(() => {
+        setUserInfo({ ...auth.currentUser });
+      });
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const LogoutHandler = async () => {
     try {
@@ -91,8 +101,9 @@ export default function UserProfile() {
           />
         </TouchableOpacity>
         <Text style={styles.email}>
-          {(auth.currentUser.displayName &&
-            auth.currentUser.displayName.split("|")[0]) ||
+          {(userInfo &&
+            userInfo.displayName &&
+            userInfo.displayName.split("|")[0]) ||
             auth.currentUser.email}
         </Text>
       </View>
