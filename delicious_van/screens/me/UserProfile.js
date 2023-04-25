@@ -163,7 +163,8 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: "column",
     alignItems: "center",
-    marginBottom: 20,
+    marginTop: 20,
+    // marginBottom: 20,
   },
   avatar: {
     width: 100,
