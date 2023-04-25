@@ -2,8 +2,8 @@
 Authors: Annabelle Sun @AnnabelleAB, Alyn Xu @alynxu, Ce Zhao @Bingbingzz
 
 ## App Demo Video Link
-https://www.youtube.com/watch?v=f6ptO_oM4j4
-https://www.veed.io/view/1ddfadcd-9b07-4dcc-8c1b-123b028efb43?panel=share
+### https://www.youtube.com/watch?v=f6ptO_oM4j4
+### https://www.veed.io/view/1ddfadcd-9b07-4dcc-8c1b-123b028efb43?panel=share
 
 ## Set up instruction: 
 - cd into the repo delicious_van
