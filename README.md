@@ -1,7 +1,7 @@
 # Delicious-Van
 Authors: Anabelle Sun @AnnabelleAB, Alyn Xu @alynxu, Ce Zhao @Bingbingzz
 
-## Demo LInk
+## Demo Link
 https://www.veed.io/view/1ddfadcd-9b07-4dcc-8c1b-123b028efb43?panel=share
 
 ## Set up instruction: 
