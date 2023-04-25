@@ -131,7 +131,9 @@ export default function PostDetail({ route }) {
         userEmail: auth.currentUser.email,
         userId: auth.currentUser.uid,
         userPicture: auth.currentUser.photoURL,
-        userName: (auth.currentUser.displayName && auth.currentUser.displayName.split("|")[0]),
+        userName:
+          auth.currentUser.displayName &&
+          auth.currentUser.displayName.split("|")[0],
         content: comment,
         date: Date.now(),
       };
@@ -149,7 +151,7 @@ export default function PostDetail({ route }) {
       });
     } else {
       Alert.alert("You need to update your username in profile.");
-      navigation.navigate('ProfileEdit')
+      navigation.navigate("ProfileEdit");
     }
   };
 
@@ -207,7 +209,8 @@ export default function PostDetail({ route }) {
   return (
     <KeyboardShift
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}>
+      style={{ flex: 1 }}
+    >
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <View style={styles.top}>
@@ -217,7 +220,10 @@ export default function PostDetail({ route }) {
               }
               style={styles.avatar}
             />
-            <Text style={styles.email}>{(user && user.displayName && user.displayName.split("|")[0]) || userEmail}</Text>
+            <Text style={styles.email}>
+              {(user && user.displayName && user.displayName.split("|")[0]) ||
+                userEmail}
+            </Text>
           </View>
           {/* <Image source={{ uri: displayImage }} style={styles.image} /> */}
 
@@ -298,7 +304,7 @@ export default function PostDetail({ route }) {
               <TouchableOpacity onPress={likeComment}>
                 <View style={styles.likeWrapper}>
                   {postData.likes &&
-                    postData.likes.includes(auth.currentUser.uid) ? (
+                  postData.likes.includes(auth.currentUser.uid) ? (
                     <Icon name="favorite" size={24} color="#fe2542" />
                   ) : (
                     <Icon name="favorite-border" size={24} />
@@ -315,7 +321,13 @@ export default function PostDetail({ route }) {
               postData.comments.map((comment, index) => (
                 <View key={index} style={styles.commentItem}>
                   <View>
-                    <Text>{comment.userName || comment.userEmail}</Text>
+                    <Text>
+                      {(comment.user &&
+                        comment.user.displayName &&
+                        comment.user.displayName.split("|")[0]) ||
+                        comment.userName ||
+                        comment.userEmail}
+                    </Text>
                     <Text style={styles.commentDate}>
                       {new Date(comment.date).toLocaleString()}
                     </Text>

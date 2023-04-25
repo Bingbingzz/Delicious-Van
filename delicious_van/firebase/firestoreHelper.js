@@ -18,6 +18,16 @@ export async function getPostFromDB(id) {
           user = doc.data();
         }
       });
+      for (let i = 0; i < (postData.comments || []).length; i++) {
+        let user;
+        queryUsersSnapshot.forEach((doc) => {
+          if (doc.data().uid === postData.comments[i].userEmail) {
+            user = doc.data();
+          }
+        });
+        postData.comments[i].user = user;
+      }
+
       return {
         id: postSnapshot.id,
         ...postData,
